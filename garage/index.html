@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GTS Garage">
+<meta name="theme-color" content="#f2f2f4">
+<title>GTS Garage</title>
+<link rel="apple-touch-icon" id="touchIcon" href="">
+<style>
+:root{
+  --bg:#f2f2f4;--card:#ffffff;--card2:#f7f7f9;--text:#0b0b0c;--sub:#6e6e73;--faint:#aeaeb2;
+  --line:rgba(0,0,0,.08);--fill:#e9e9ed;--accent:#1d1d1f;--onaccent:#ffffff;--grey:#8a8d91;
+  --good:#2f8f57;--bad:#c9372c;--warn:#b7791f;--tab:rgba(250,250,252,.82);
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 10px 30px rgba(0,0,0,.06);
+  --hero1:#2b2c2f;--hero2:#121214;
+  --r:20px;--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+}
+:root[data-theme=dark]{
+  --bg:#000;--card:#151517;--card2:#1c1c1f;--text:#f5f5f7;--sub:#98989d;--faint:#5a5a5f;
+  --line:rgba(255,255,255,.08);--fill:#242427;--accent:#f5f5f7;--onaccent:#0b0b0c;--grey:#9a9da1;
+  --good:#4cc27a;--bad:#ff6b5e;--warn:#e0a53a;--tab:rgba(18,18,20,.82);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.35);
+  --hero1:#2a2b2e;--hero2:#0d0d0f;
+}
+@media (prefers-color-scheme:dark){:root[data-theme=auto]{
+  --bg:#000;--card:#151517;--card2:#1c1c1f;--text:#f5f5f7;--sub:#98989d;--faint:#5a5a5f;
+  --line:rgba(255,255,255,.08);--fill:#242427;--accent:#f5f5f7;--onaccent:#0b0b0c;--grey:#9a9da1;
+  --good:#4cc27a;--bad:#ff6b5e;--warn:#e0a53a;--tab:rgba(18,18,20,.82);
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 10px 30px rgba(0,0,0,.35);
+  --hero1:#2a2b2e;--hero2:#0d0d0f;
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Inter,Segoe UI,Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;letter-spacing:-.01em}
+body{min-height:100vh;transition:background .3s}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+input,select,textarea{font:inherit;color:inherit}
+.app{max-width:560px;margin:0 auto;padding:calc(var(--safe-t) + 8px) 16px calc(110px + var(--safe-b))}
+.num{font-variant-numeric:tabular-nums}
+
+/* Header */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:14px 4px 14px}
+.top .eyebrow{font-size:13px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.08em}
+.top h1{margin:2px 0 0;font-size:34px;line-height:1.08;font-weight:700;letter-spacing:-.025em}
+.back{display:inline-flex;align-items:center;gap:2px;color:var(--sub);font-size:16px;margin:4px 0 0 -4px;padding:6px 4px}
+.iconbtn{width:38px;height:38px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);display:grid;place-items:center;flex:none}
+.iconbtn svg{width:20px;height:20px}
+
+/* Cards */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;margin:0 0 14px;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.view>*:nth-child(2){animation-delay:.03s}.view>*:nth-child(3){animation-delay:.06s}.view>*:nth-child(4){animation-delay:.09s}
+.view>*:nth-child(5){animation-delay:.12s}.view>*:nth-child(6){animation-delay:.15s}.view>*:nth-child(n+7){animation-delay:.18s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.card-h{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;gap:10px}
+.card-h h3{margin:0;font-size:17px;font-weight:650;letter-spacing:-.015em}
+.link{color:var(--sub);font-size:15px;font-weight:500}
+.muted{color:var(--sub)}.small{font-size:13px}
+.sectiontitle{font-size:13px;font-weight:600;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin:22px 6px 8px}
+
+/* Hero */
+.hero{position:relative;overflow:hidden;border-radius:26px;padding:20px 20px 18px;margin-bottom:14px;color:#f5f5f7;
+  background:radial-gradient(120% 80% at 80% 0%,#4a4c50 0%,transparent 60%),linear-gradient(160deg,var(--hero1),var(--hero2));
+  box-shadow:0 20px 50px rgba(0,0,0,.25);animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.hero .brand{font-size:12px;letter-spacing:.32em;font-weight:600;color:#a9abaf;text-transform:uppercase}
+.hero .model{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:4px}
+.hero .meta{font-size:13px;color:#a9abaf;margin-top:2px}
+.hero .carimg{display:block;width:100%;height:150px;object-fit:cover;border-radius:16px;margin:14px 0 10px}
+.carpick{position:relative;display:block;cursor:pointer}.carpick input{position:absolute;inset:0;opacity:0;width:100%}.carhint{position:absolute;right:0;top:4px;font-size:11.5px;font-weight:600;color:#d6d7da;background:rgba(255,255,255,.12);padding:5px 10px;border-radius:99px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hero .carsvg{display:block;width:100%;height:auto;margin:6px 0 2px}
+.hero .kmrow{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.hero .km{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.hero .km small{font-size:17px;font-weight:600;color:#a9abaf;margin-left:4px}
+.hero .label{font-size:12px;color:#a9abaf;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;font-size:14px;font-weight:600;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.hero .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1)}
+.hero .stats div b,.hero .stats button b{display:block;white-space:nowrap;font-size:15px;font-weight:650;color:#fff}
+.hero .stats div span,.hero .stats button span{font-size:11.5px;color:#a9abaf}
+.badge{display:inline-block;font-size:10.5px;font-weight:650;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:var(--fill);color:var(--sub);vertical-align:middle}
+.hero .badge{background:rgba(255,255,255,.14);color:#d6d7da}
+.badge.good{background:color-mix(in srgb,var(--good) 16%,transparent);color:var(--good)}
+.badge.bad{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}
+.badge.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+
+/* Tiles */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.tiles.three{grid-template-columns:repeat(3,1fr)}
+.tile{background:var(--card);border-radius:18px;box-shadow:var(--shadow);padding:14px 14px 13px;min-height:86px;display:flex;flex-direction:column;justify-content:space-between;animation:rise .5s cubic-bezier(.2,.8,.2,1) both;transition:transform .15s}
+.tile:active,.row:active,.qa:active,.btn:active{transform:scale(.97)}
+.tile .tl{font-size:12.5px;color:var(--sub);font-weight:500}
+.tile .tv{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+.tile .ts{font-size:12px;color:var(--faint);margin-top:2px}
+.tiles.three .tile .tv{font-size:18px}
+
+/* Lists */
+.list{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:14px;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+.card .list{box-shadow:none;border-radius:14px;background:var(--card2);margin:0}
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;border-bottom:1px solid var(--line);transition:background .15s,transform .15s}
+.row:last-child{border-bottom:0}
+.row .ic{width:34px;height:34px;border-radius:10px;background:var(--fill);display:grid;place-items:center;flex:none}
+.row .ic svg{width:18px;height:18px}
+.row-main{flex:1;min-width:0}
+.row-t{font-size:16px;font-weight:550;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-s{font-size:13px;color:var(--sub);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-r{text-align:right;font-size:15px;font-weight:600;flex:none}
+.row-r .row-s{font-weight:400}
+.chev{color:var(--faint);flex:none}
+.monthhead{font-size:13px;font-weight:600;color:var(--sub);padding:14px 16px 6px;background:var(--card);border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.empty{text-align:center;padding:26px 16px;color:var(--sub);font-size:15px}
+.empty .btn{margin-top:12px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 20px;border-radius:14px;background:var(--accent);color:var(--onaccent);font-weight:600;font-size:16px;transition:transform .15s,opacity .2s}
+.btn.block{width:100%}
+.btn.ghost{background:var(--fill);color:var(--text)}
+.btn.danger{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+.btn.sm{height:36px;padding:0 14px;font-size:14px;border-radius:11px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+.btnrow .btn{flex:1}
+.addbtn{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--onaccent);display:grid;place-items:center;flex:none;box-shadow:var(--shadow)}
+.addbtn svg{width:20px;height:20px}
+
+/* KV rows */
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.kv:last-child{border-bottom:0}.kv span{color:var(--sub)}.kv b{font-weight:600;text-align:right}
+.big{font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.delta{font-size:15px;font-weight:600}
+.good{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+
+/* Progress */
+.bar{height:8px;border-radius:99px;background:var(--fill);overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--accent);width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.bar.warn i{background:var(--warn)}.bar.bad i{background:var(--bad)}
+
+/* Segmented */
+.seg{display:flex;background:var(--fill);border-radius:10px;padding:2px;gap:2px;margin-bottom:12px}
+.seg button{flex:1;padding:7px 8px;border-radius:8px;font-size:13.5px;font-weight:550;color:var(--sub);text-align:center;transition:all .2s}
+.seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:7px 13px;border-radius:99px;background:var(--card);box-shadow:var(--shadow);font-size:14px;font-weight:550;color:var(--sub)}
+.chip.on{background:var(--accent);color:var(--onaccent)}
+
+/* Charts */
+.chart{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-size:10px;fill:var(--sub);font-family:inherit}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;margin-top:12px;font-size:13px}
+.legend div{display:flex;align-items:center;gap:7px;min-width:0}
+.legend i{width:10px;height:10px;border-radius:3px;flex:none}
+.legend span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--sub)}
+.donutwrap{display:flex;align-items:center;gap:16px}
+.donutwrap svg{width:132px;flex:none}
+.note{font-size:12.5px;color:var(--faint);margin-top:10px;line-height:1.4}
+
+/* Tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--tab);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--line);padding:6px 8px calc(6px + var(--safe-b))}
+.tabbar .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);align-items:center}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 0;color:var(--faint);font-size:10.5px;font-weight:550;text-align:center;transition:color .2s}
+.tab svg{width:25px;height:25px}
+.tab.on{color:var(--text)}
+.tab.plus{color:var(--onaccent)}
+.tab.plus span{width:50px;height:50px;border-radius:50%;background:var(--accent);display:grid;place-items:center;box-shadow:0 8px 22px rgba(0,0,0,.25);margin-top:-14px;transition:transform .2s}
+.tab.plus:active span{transform:scale(.92)}
+.tab.plus svg{width:24px;height:24px}
+
+/* Sheet */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.35);opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;justify-content:center}
+.overlay.show{opacity:1}
+.sheet{width:100%;max-width:560px;max-height:92vh;overflow:auto;-webkit-overflow-scrolling:touch;background:var(--bg);border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform .38s cubic-bezier(.2,.9,.2,1);padding:0 16px calc(24px + var(--safe-b))}
+.overlay.show .sheet{transform:none}
+.sheet-h{position:sticky;top:0;z-index:2;background:var(--bg);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 0 12px;margin:0 -16px 6px;padding-left:16px;padding-right:16px}
+.sheet-h::before{content:"";position:absolute;top:6px;left:50%;width:36px;height:5px;border-radius:9px;background:var(--faint);transform:translateX(-50%);opacity:.6}
+.sheet-h h2{margin:12px 0 0;font-size:17px;font-weight:650;text-align:center}
+.sheet-h .l,.sheet-h .r{margin-top:12px;font-size:16px;color:var(--sub)}
+.sheet-h .r{text-align:right;font-weight:650;color:var(--text)}
+.grp{background:var(--card);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.grp-t{font-size:13px;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin:18px 6px 7px;font-weight:600}
+.f{display:flex;align-items:center;gap:12px;padding:0 16px;min-height:50px;border-bottom:1px solid var(--line)}
+.f:last-child{border-bottom:0}
+.f>span{flex:none;font-size:16px;max-width:52%}
+.f input,.f select{flex:1;min-width:0;border:0;background:transparent;text-align:right;font-size:16px;padding:14px 0;outline:none;color:var(--text);-webkit-appearance:none;appearance:none}
+.f select{direction:rtl}
+.f input::placeholder{color:var(--faint)}
+.f input[type=date]{min-height:24px}
+.f.ta{display:block;padding:12px 16px}
+.f.ta span{display:block;font-size:13px;color:var(--sub);margin-bottom:6px}
+.f textarea{width:100%;min-height:80px;border:0;background:transparent;resize:vertical;font-size:16px;outline:none}
+.f.err{background:color-mix(in srgb,var(--bad) 8%,transparent)}
+.f .unit{color:var(--sub);font-size:15px;flex:none}
+.sw{position:relative;width:51px;height:31px;flex:none;margin-left:auto}
+.sw input{position:absolute;opacity:0;inset:0;margin:0;z-index:1}
+.sw i{position:absolute;inset:0;border-radius:99px;background:var(--fill);transition:background .25s}
+.sw i::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.2,.9,.2,1)}
+.sw input:checked+i{background:var(--good)}
+.sw input:checked+i::after{transform:translateX(20px)}
+.hint{font-size:13px;color:var(--sub);margin:-6px 6px 14px;line-height:1.4}
+.docs{display:flex;flex-wrap:wrap;gap:8px;padding:12px 16px}
+.doc{position:relative;width:70px;height:70px;border-radius:10px;background:var(--fill);overflow:hidden;display:grid;place-items:center;font-size:11px;font-weight:600;color:var(--sub)}
+.doc img{width:100%;height:100%;object-fit:cover}
+.doc .x{position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:20px;text-align:center}
+.filebtn{position:relative;overflow:hidden}
+.filebtn input{position:absolute;inset:0;opacity:0}
+
+/* Quick add */
+.qagrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:6px 0 4px}
+.qa{background:var(--card);border-radius:18px;padding:16px 8px 13px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:13.5px;font-weight:550;transition:transform .15s}
+.qa .ic{width:44px;height:44px;border-radius:14px;background:var(--fill);display:grid;place-items:center}
+.qa .ic svg{width:22px;height:22px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translate(-50%,20px);background:var(--accent);color:var(--onaccent);padding:11px 18px;border-radius:999px;font-size:14.5px;font-weight:600;opacity:0;transition:all .35s cubic-bezier(.2,.9,.2,1);z-index:80;pointer-events:none;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Setup */
+.setup .hero{margin-top:10px}
+.feat{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.feat span{font-size:12.5px;padding:5px 10px;border-radius:99px;background:var(--fill);color:var(--sub)}
+.hero .feat span{background:rgba(255,255,255,.1);color:#d6d7da}
+.warnbox{background:color-mix(in srgb,var(--warn) 14%,var(--card));border-radius:14px;padding:12px 14px;font-size:13.5px;line-height:1.4;margin-bottom:14px}
+
+#print{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  .app,.tabbar,.overlay,.toast{display:none!important}
+  #print{display:block;font-size:12px;padding:10px}
+  #print h1{font-size:20px;margin:0 0 4px}#print h2{font-size:14px;margin:16px 0 6px;border-bottom:1px solid #ccc;padding-bottom:3px}
+  #print table{width:100%;border-collapse:collapse}#print td,#print th{text-align:left;padding:3px 4px;border-bottom:1px solid #eee}
+}
+</style>
+</head>
+<body>
+<div class="app"><main id="view" class="view"></main></div>
+<nav class="tabbar" id="tabbar" hidden><div class="in" id="tabs"></div></nav>
+<div class="toast" id="toast"></div>
+<div id="print"></div>
+
+<script>
+"use strict";
+/* ============ Konstanten ============ */
+const CATS=['Tanken','Versicherung','Kfz-Steuer','Wartung','Inspektionen','Bremsen','Reifen','Reparaturen','Pflege und Aufbereitung','Sonstige Kosten'];
+const CAT_COLORS=['var(--text)','#8e8e93','#5e7a8a','#a2845e','#7d8f69','#9a5b5b','#6b6b8f','#c7c7cc','#b49a6a','#4f6b66'];
+const SVC_TYPES=['Ölwechsel','Inspektion','Bremsen','Reifenwechsel','TÜV / HU','Reparatur','Sonstiges'];
+const SVC_CAT={'Ölwechsel':'Wartung','Inspektion':'Inspektionen','Bremsen':'Bremsen','Reifenwechsel':'Reifen','TÜV / HU':'Wartung','Reparatur':'Reparaturen'};
+const FUELS=['Super Plus 98','Super 95','Premium 100+','Sonstige'];
+const PURPOSES=['Privat','Arbeit / Pendeln','Urlaub / Reise','Geschäftlich','Sonstiges'];
+const MON=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const MONL=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+const DAY=864e5;
+
+/* ============ Icons ============ */
+const I={
+  gauge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l4-5"/><path d="M3.5 17a9 9 0 1117 0"/><circle cx="12" cy="14" r="1.2" fill="currentColor"/></svg>',
+  fuel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 012-2h7a2 2 0 012 2v16"/><path d="M3 21h13"/><path d="M7 7h5v4H7z"/><path d="M15 9l3 0 2 2v6a1.5 1.5 0 01-3 0v-3h-2"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  wrench:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 00-5.4 5.2L3.5 17.3a1.8 1.8 0 002.5 2.5l5.8-5.8a4 4 0 005.2-5.4l-2.5 2.5-2.3-.4-.4-2.3z"/></svg>',
+  more:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg>',
+  euro:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 6.5A7 7 0 106.5 16.8"/><path d="M17 17.5a7 7 0 01-10.5-.7"/><path d="M4 10h9M4 14h8"/></svg>',
+  road:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3L4 21M16 3l4 18M12 4v3M12 11v3M12 18v2"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 16l4-5 4 3 6-8"/></svg>',
+  bank:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-5 9 5"/><path d="M5 10v8M10 10v8M14 10v8M19 10v8M3 21h18"/></svg>',
+  car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16v-3l2-5a2 2 0 012-1.3h10A2 2 0 0119 8l2 5v3"/><path d="M3 13h18"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/></svg>',
+  data:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11.5A7 7 0 005 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+  flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg>',
+  odo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="7" width="18" height="10" rx="3"/><path d="M7.5 10.5v3M11 10.5v3M14.5 10.5v3"/></svg>',
+  tag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  chevL:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  chevR:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg>',
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>'
+};
+const CAR_SVG=`<svg class="carsvg" viewBox="0 0 600 205" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<defs>
+<linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9bcc1"/><stop offset=".28" stop-color="#7d8086"/><stop offset=".6" stop-color="#4b4e53"/><stop offset="1" stop-color="#1e1f22"/></linearGradient>
+<linearGradient id="cw" x1="0" y1="0" x2="1" y2=".4"><stop offset="0" stop-color="#121316"/><stop offset=".55" stop-color="#2a2d33"/><stop offset="1" stop-color="#16171a"/></linearGradient>
+<linearGradient id="hl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<radialGradient id="rim" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#5c5f65"/><stop offset="1" stop-color="#1a1b1e"/></radialGradient>
+<radialGradient id="sh" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".7"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+<g id="wh"><circle r="41" fill="#0b0b0c"/><circle r="38" fill="none" stroke="#1d1e21" stroke-width="3"/><circle r="30" fill="url(#rim)"/>
+<path d="M-6,-27 A28,28 0 0 1 22,-17 L17,-11 A20,20 0 0 0 -4,-19 Z" fill="#b3261e"/>
+<g stroke="#9ea1a6" stroke-width="4.2" stroke-linecap="round"><line x1="0" y1="-7" x2="0" y2="-28"/><line x1="6.7" y1="-2.2" x2="26.6" y2="-8.7"/><line x1="4.1" y1="5.7" x2="16.5" y2="22.7"/><line x1="-4.1" y1="5.7" x2="-16.5" y2="22.7"/><line x1="-6.7" y1="-2.2" x2="-26.6" y2="-8.7"/></g>
+<circle r="29.5" fill="none" stroke="#c7c9cd" stroke-width="1.4" opacity=".7"/><circle r="7.5" fill="#2a2c30" stroke="#9ea1a6" stroke-width="1.5"/></g>
+</defs>
+<ellipse cx="300" cy="192" rx="285" ry="11" fill="url(#sh)"/>
+<path d="M38,150 C30,148 27,138 29,127 L33,112 C35,104 43,100 60,98 L110,94 C172,82 216,66 270,61 C324,57 364,61 398,71 C421,78 440,86 456,92 C500,96 540,100 560,107 C572,112 577,122 575,134 L571,148 C569,152 565,154 558,154 L508,154 A48,48 0 0 0 412,154 L183,154 A48,48 0 0 0 87,154 L50,154 C44,154 40,152 38,150 Z" fill="url(#cb)"/>
+<path d="M60,103 C200,99 400,96 562,111" stroke="url(#hl)" stroke-width="2" fill="none"/>
+<path d="M110,94 C172,82 216,66 270,61 C324,57 364,61 398,71" stroke="#fff" stroke-opacity=".35" stroke-width="1.5" fill="none"/>
+<path d="M150,97 C190,84 226,72 272,68 C318,64 356,67 386,76 C399,81 408,88 414,94 Z" fill="url(#cw)" stroke="#c9cbcf" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M302,66 L299,96" stroke="#55585e" stroke-width="7"/>
+<path d="M206,78 L198,97" stroke="#55585e" stroke-width="4"/>
+<path d="M290,99 L288,150 M412,98 C414,120 413,134 408,146" stroke="#000" stroke-opacity=".28" stroke-width="1.2" fill="none"/>
+<rect x="258" y="108" width="20" height="4" rx="2" fill="#2a2c30" opacity=".7"/><rect x="368" y="106" width="20" height="4" rx="2" fill="#2a2c30" opacity=".7"/>
+<path d="M404,92 C406,84 416,82 424,85 L426,94 Z" fill="#4b4e53"/>
+<path d="M183,148 L412,148 L408,154 L187,154 Z" fill="#141517"/>
+<path d="M30,112 C45,108 70,106 98,105" stroke="#d42a20" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+<path d="M545,106 C556,108 566,112 571,119 C562,119 552,116 545,112 Z" fill="#eef3f8"/>
+<path d="M548,140 L572,138" stroke="#0e0f11" stroke-width="5" stroke-linecap="round"/>
+<path d="M36,140 L60,142" stroke="#0e0f11" stroke-width="4" stroke-linecap="round"/>
+<use href="#wh" x="135" y="152"/><use href="#wh" x="460" y="152"/>
+</svg>`;
+
+/* ============ Helfer ============ */
+const $=s=>document.querySelector(s);
+const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const today=()=>iso(new Date());
+const pd=s=>new Date((s||today())+'T12:00:00');
+const ts=s=>pd(s).getTime();
+const addMonths=(s,m)=>{const d=pd(s);const day=d.getDate();d.setDate(1);d.setMonth(d.getMonth()+m);const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();d.setDate(Math.min(day,last));return iso(d)};
+const fdate=s=>{if(!s)return'–';const d=pd(s);return `${pad(d.getDate())}.${pad(d.getMonth()+1)}.${d.getFullYear()}`};
+const fdateS=s=>{const d=pd(s);return `${d.getDate()}. ${MON[d.getMonth()]}`};
+const nf=(n,d=0)=>new Intl.NumberFormat('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d}).format(isFinite(n)?n:0);
+const eur=(n,d)=>{if(n==null||!isFinite(n))return'–';if(d==null)d=Math.abs(n)<100&&n%1!==0?2:0;return nf(n,d)+' €'};
+const km=n=>(n==null||!isFinite(n))?'–':nf(Math.round(n))+' km';
+const pct=(n,d=1)=>isFinite(n)?nf(n,d)+' %':'–';
+const sum=a=>a.reduce((s,x)=>s+(+x||0),0);
+const parseNum=s=>{s=String(s??'').trim().replace(/\s|€|%/g,'');if(!s)return null;if(s.includes(','))s=s.replace(/\./g,'').replace(',','.');const n=parseFloat(s);return isFinite(n)?n:null};
+const parseInt2=s=>{s=String(s??'').replace(/[^\d-]/g,'');if(!s)return null;const n=parseInt(s,10);return isFinite(n)?n:null};
+const decStr=n=>n==null||n===''?'':String(n).replace('.',',');
+const monthKey=s=>s.slice(0,7);
+const startOfWeek=()=>{const d=new Date();const wd=(d.getDay()+6)%7;d.setDate(d.getDate()-wd);return iso(d)};
+const startOfMonth=()=>{const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-01`};
+const startOfYear=()=>`${new Date().getFullYear()}-01-01`;
+const endOfYear=()=>`${new Date().getFullYear()}-12-31`;
+const daysBetween=(a,b)=>Math.round((ts(b)-ts(a))/DAY);
+
+/* ============ Speicher ============ */
+const Store={
+  mode:'memory',db:null,
+  async init(){
+    try{
+      this.db=await new Promise((res,rej)=>{const r=indexedDB.open('gts-garage',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);setTimeout(()=>rej('timeout'),2500)});
+      this.mode='idb';
+    }catch(e){
+      try{localStorage.setItem('__t','1');localStorage.removeItem('__t');this.mode='ls'}catch(e2){this.mode='memory'}
+    }
+    try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+  },
+  async load(){
+    try{
+      if(this.mode==='idb')return await new Promise((res,rej)=>{const t=this.db.transaction('kv').objectStore('kv').get('state');t.onsuccess=()=>res(t.result||null);t.onerror=()=>rej(t.error)});
+      if(this.mode==='ls'){const s=localStorage.getItem('gts-garage');return s?JSON.parse(s):null}
+    }catch(e){}
+    return null;
+  },
+  async save(v){
+    try{
+      if(this.mode==='idb')return await new Promise((res,rej)=>{const tx=this.db.transaction('kv','readwrite');tx.objectStore('kv').put(v,'state');tx.oncomplete=()=>res(true);tx.onerror=()=>rej(tx.error)});
+      if(this.mode==='ls'){localStorage.setItem('gts-garage',JSON.stringify(v));return true}
+    }catch(e){toast('Speichern fehlgeschlagen – bitte Backup exportieren')}
+    return false;
+  }
+};
+
+function defaultState(){
+  return {
+    v:1,setup:false,
+    car:{make:'Porsche',model:'Panamera GTS',year:2022,engine:'4.0 V8 Biturbo',ps:480,nm:620,color:'Vulkangrau',body:'Limousine',gearbox:'PDK',drive:'Allrad',
+      price:81000,kmPurchase:68000,purchaseDate:today(),accidentFree:true,serviceBook:true,warrantyUntil:'',plate:'',vin:'',
+      features:['Porsche Approved Garantie','Carbon-Paket innen','Sportabgasanlage','Sport-Chrono-Paket','Neue Bremsen','Neue Winterreifen','Sommerreifen für eine Saison'],photo:null},
+    settings:{theme:'auto',weeklyKm:250,depAge:9,depKm:0.15,fuelType:'Super Plus 98'},
+    odo:[],fuel:[],costs:[],service:[],trips:[],plans:[],values:[],
+    finance:null
+  };
+}
+let S=defaultState();
+let saveT=null;
+function persist(){clearTimeout(saveT);saveT=setTimeout(()=>Store.save(S),200)}
+function merge(base,src){const o={...base,...src};o.car={...base.car,...(src.car||{})};o.settings={...base.settings,...(src.settings||{})};['odo','fuel','costs','service','trips','plans','values'].forEach(k=>o[k]=Array.isArray(src[k])?src[k]:[]);return o}
+
+/* ============ Berechnungen ============ */
+function readings(){
+  const r=[{date:S.car.purchaseDate,km:+S.car.kmPurchase||0,src:'Kauf'}];
+  S.odo.forEach(o=>o.km&&r.push({date:o.date,km:o.km}));
+  S.fuel.forEach(f=>f.km&&r.push({date:f.date,km:f.km}));
+  S.service.forEach(s=>s.status==='erledigt'&&s.km&&s.date&&r.push({date:s.date,km:s.km}));
+  S.trips.forEach(t=>{if(t.kmStart)r.push({date:t.date,km:t.kmStart});if(t.kmEnd)r.push({date:t.dateEnd||t.date,km:t.kmEnd})});
+  r.sort((a,b)=>ts(a.date)-ts(b.date)||a.km-b.km);
+  let mx=0;return r.map(x=>{mx=Math.max(mx,x.km);return {date:x.date,t:ts(x.date),km:mx}});
+}
+let _R=null;const R=()=>_R||(_R=readings());
+function invalidate(){_R=null}
+const currentKm=()=>{const r=R();return r[r.length-1].km};
+const lastReading=()=>{const r=R();return r[r.length-1]};
+function kmAt(dateStr){
+  const r=R(),t=ts(dateStr);
+  if(t<=r[0].t)return r[0].km;
+  for(let i=0;i<r.length-1;i++){
+    const a=r[i],b=r[i+1];
+    if(t>=a.t&&t<b.t){return b.t===a.t?b.km:a.km+(b.km-a.km)*(t-a.t)/(b.t-a.t)}
+  }
+  return r[r.length-1].km;
+}
+const drivenSince=d=>Math.max(0,currentKm()-kmAt(d));
+const kmSincePurchase=()=>Math.max(0,currentKm()-(+S.car.kmPurchase||0));
+function weeklyRate(){
+  const r=R(),a=r[0],b=r[r.length-1];const days=(b.t-a.t)/DAY;
+  if(days>=21&&b.km>a.km){
+    const special=sum(S.trips.filter(t=>t.special&&ts(t.date)>=a.t&&ts(t.date)<=b.t).map(t=>tripKm(t)));
+    const v=Math.max(0,(b.km-a.km-special))/(days/7);
+    return {v,src:'gemessen'};
+  }
+  return {v:+S.settings.weeklyKm||0,src:'Annahme'};
+}
+const tripKm=t=>(t.kmEnd&&t.kmStart)?Math.max(0,t.kmEnd-t.kmStart):(+t.km||0);
+function plannedKm(fromStr,toStr){const a=ts(fromStr),b=ts(toStr);return sum(S.plans.filter(p=>!p.done&&ts(p.date)>a&&ts(p.date)<=b).map(p=>p.km))}
+function projectKm(targetStr){
+  const lr=lastReading(),w=weeklyRate().v;
+  const weeks=Math.max(0,(ts(targetStr)-lr.t)/DAY/7);
+  return lr.km+w*weeks+plannedKm(today(),targetStr);
+}
+function yearPlan(){
+  const y=new Date().getFullYear(),start=ts(`${y}-01-01`),end=ts(`${y}-12-31`);
+  const from=Math.max(start,ts(S.car.purchaseDate));
+  const weeks=Math.max(0,(end-from)/DAY/7);
+  const plans=sum(S.plans.filter(p=>{const t=ts(p.date);return t>=start&&t<=end}).map(p=>p.km));
+  return (+S.settings.weeklyKm||0)*weeks+plans;
+}
+
+/* Tanken */
+function fuelStats(){
+  const f=[...S.fuel].sort((a,b)=>a.km-b.km||ts(a.date)-ts(b.date));
+  const per={};let segKm=0,segL=0,segC=0,last=null,accL=0,accC=0;
+  f.forEach((x,i)=>{
+    if(last!==null){accL+=+x.liters||0;accC+=+x.total||0}
+    if(x.full){
+      if(last!==null){const d=x.km-f[last].km;if(d>0&&accL>0){per[x.id]={l100:accL/d*100,c100:accC/d*100,km:d};segKm+=d;segL+=accL;segC+=accC}}
+      last=i;accL=0;accC=0;
+    }
+  });
+  const L=sum(S.fuel.map(x=>x.liters)),C=sum(S.fuel.map(x=>x.total));
+  const ym=monthKey(today()),yy=today().slice(0,4);
+  return {per,l100:segKm?segL/segKm*100:null,c100:segKm?segC/segKm*100:null,ppl:L?C/L:null,
+    month:sum(S.fuel.filter(x=>monthKey(x.date)===ym).map(x=>x.total)),year:sum(S.fuel.filter(x=>x.date.slice(0,4)===yy).map(x=>x.total)),
+    liters:L,total:C,count:S.fuel.length};
+}
+
+/* Kosten */
+function allCosts(){
+  const a=S.costs.map(c=>({id:c.id,date:c.date,cat:c.cat,amount:+c.amount||0,note:c.note||'',src:'cost'}));
+  S.fuel.forEach(f=>a.push({id:f.id,date:f.date,cat:'Tanken',amount:+f.total||0,note:[f.station,nf(f.liters,2)+' l'].filter(Boolean).join(' · '),src:'fuel'}));
+  S.service.forEach(s=>{if(s.status==='erledigt'&&+s.cost>0)a.push({id:s.id,date:s.date,cat:SVC_CAT[s.type]||'Sonstige Kosten',amount:+s.cost,note:s.type+(s.note?' · '+s.note:''),src:'service'})});
+  return a.sort((x,y)=>ts(y.date)-ts(x.date));
+}
+function costStats(){
+  const a=allCosts(),total=sum(a.map(x=>x.amount));
+  const months=Math.max(1,(Date.now()-ts(S.car.purchaseDate))/DAY/30.44);
+  const kmD=kmSincePurchase();
+  const yy=today().slice(0,4),ym=monthKey(today());
+  return {all:a,total,perMonth:total/months,perKm:kmD>0?total/kmD:null,
+    year:sum(a.filter(x=>x.date.slice(0,4)===yy).map(x=>x.amount)),month:sum(a.filter(x=>monthKey(x.date)===ym).map(x=>x.amount))};
+}
+function monthlySeries(items,n=12){
+  const out=[];const d=new Date();d.setDate(1);
+  for(let i=n-1;i>=0;i--){const x=new Date(d.getFullYear(),d.getMonth()-i,1);const k=`${x.getFullYear()}-${pad(x.getMonth()+1)}`;out.push({k,label:MON[x.getMonth()],value:0})}
+  items.forEach(it=>{const o=out.find(z=>z.k===monthKey(it.date));if(o)o.value+=it.amount});
+  return out;
+}
+function yearlySeries(items){
+  const y0=+S.car.purchaseDate.slice(0,4),y1=new Date().getFullYear();const out=[];
+  for(let y=Math.min(y0,y1);y<=y1;y++)out.push({k:String(y),label:String(y),value:0});
+  items.forEach(it=>{const o=out.find(z=>z.k===it.date.slice(0,4));if(o)o.value+=it.amount});
+  return out;
+}
+
+/* Wert */
+function anchor(){
+  const v=S.values.filter(x=>ts(x.date)<=Date.now()+DAY).sort((a,b)=>ts(a.date)-ts(b.date));
+  const l=v[v.length-1];
+  if(l)return {date:l.date,value:+l.value,km:l.km||kmAt(l.date),manual:true};
+  return {date:S.car.purchaseDate,value:+S.car.price||0,km:+S.car.kmPurchase||0,manual:false};
+}
+function estValue(dateStr,kmVal){
+  const a=anchor();const yrs=Math.max(0,(ts(dateStr)-ts(a.date))/DAY/365.25);
+  const v=a.value*Math.pow(1-(+S.settings.depAge||0)/100,yrs)-(+S.settings.depKm||0)*Math.max(0,kmVal-a.km);
+  return Math.max(0,v);
+}
+function valueNow(){
+  const a=anchor();const fresh=a.manual&&daysBetween(a.date,today())<=7;
+  const v=fresh?a.value:estValue(today(),currentKm());
+  return {v,estimated:!fresh,anchor:a};
+}
+
+/* Finanzierung */
+function finCalc(f,atStr){
+  if(!f||!f.amount||!f.months)return null;
+  const P=+f.amount,B=+f.balloon||0,n=+f.months,r=(+f.rate||0)/1200;
+  const pay=r===0?(P-B)/n:(P-B/Math.pow(1+r,n))*r/(1-Math.pow(1+r,-n));
+  const at=pd(atStr||today()),st=pd(f.start);
+  let k=(at.getFullYear()-st.getFullYear())*12+(at.getMonth()-st.getMonth());if(at.getDate()<st.getDate())k--;
+  k=Math.max(0,Math.min(n,k));
+  const rest=kk=>r===0?P-pay*kk:P*Math.pow(1+r,kk)-pay*(Math.pow(1+r,kk)-1)/r;
+  const rk=rest(k);
+  return {pay,k,n,rest:k>=n?B:rk,restRaw:rk,interestPaid:pay*k-(P-rk),totalInterest:pay*n+B-P,balloon:B,end:addMonths(f.start,n),paid:pay*k};
+}
+
+/* Service */
+function upcoming(){
+  const list=S.service.filter(s=>s.status==='geplant').map(s=>{
+    const dl=s.date?daysBetween(today(),s.date):null;const kl=s.km?s.km-currentKm():null;
+    return {...s,dl,kl,kind:'svc'};
+  });
+  if(S.car.warrantyUntil){list.push({id:'warranty',type:'Porsche Approved Garantie endet',date:S.car.warrantyUntil,dl:daysBetween(today(),S.car.warrantyUntil),kind:'warranty'})}
+  const score=x=>Math.min(x.dl??1e9,x.kl!=null?x.kl/(Math.max(weeklyRate().v,1)/7):1e9);
+  return list.sort((a,b)=>score(a)-score(b));
+}
+function dueText(x){
+  const p=[];
+  if(x.dl!=null)p.push(x.dl<0?`seit ${-x.dl} Tagen überfällig`:x.dl===0?'heute':`in ${x.dl} Tagen · ${fdate(x.date)}`);
+  if(x.kl!=null)p.push(x.kl<0?`${km(-x.kl)} überzogen`:`in ${km(x.kl)}`);
+  return p.join(' · ')||'ohne Termin';
+}
+const dueClass=x=>((x.dl!=null&&x.dl<0)||(x.kl!=null&&x.kl<0))?'bad':((x.dl!=null&&x.dl<=30)||(x.kl!=null&&x.kl<=1000))?'warn':'';
+
+/* ============ Diagramme ============ */
+function lineChart(series,{h=170,fmt=v=>nf(v),xfmt=t=>{const d=new Date(t);return MON[d.getMonth()]+' '+String(d.getFullYear()).slice(2)}}={}){
+  const pts=series.flatMap(s=>s.points);
+  if(pts.length<2)return `<div class="empty small">Noch zu wenige Daten für ein Diagramm.</div>`;
+  const W=340,H=h,pl=6,pr=6,pt=14,pb=22;
+  let t0=Math.min(...pts.map(p=>p.t)),t1=Math.max(...pts.map(p=>p.t));if(t1===t0)t1=t0+DAY;
+  let y0=Math.min(...pts.map(p=>p.y)),y1=Math.max(...pts.map(p=>p.y));if(y1===y0){y1+=1;y0-=1}
+  const sp=y1-y0;y0-=sp*.12;y1+=sp*.12;
+  const X=t=>pl+(t-t0)/(t1-t0)*(W-pl-pr),Y=y=>pt+(1-(y-y0)/(y1-y0))*(H-pt-pb);
+  let g='';
+  for(let i=0;i<3;i++){const v=y0+(y1-y0)*(.15+i*.35);const yy=Y(v);g+=`<line x1="${pl}" x2="${W-pr}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${pl}" y="${yy-4}">${esc(fmt(v))}</text>`}
+  let s='';
+  series.forEach((se,i)=>{
+    if(se.points.length<1)return;
+    const d=se.points.map((p,j)=>(j?'L':'M')+X(p.t).toFixed(1)+','+Y(p.y).toFixed(1)).join('');
+    if(se.area&&se.points.length>1){s+=`<path d="${d}L${X(se.points[se.points.length-1].t).toFixed(1)},${H-pb}L${X(se.points[0].t).toFixed(1)},${H-pb}Z" fill="url(#ga)"/>`}
+    s+=`<path d="${d}" fill="none" stroke="${se.color||'var(--text)'}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" ${se.dashed?'stroke-dasharray="5 5"':''} style="${se.dashed?'':'stroke-dasharray:1000;stroke-dashoffset:1000;animation:draw 1.4s ease forwards'}"/>`;
+    if(se.dots)se.points.forEach(p=>s+=`<circle cx="${X(p.t).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="3.2" fill="var(--card)" stroke="${se.color||'var(--text)'}" stroke-width="2"/>`);
+  });
+  const xl=[t0,(t0+t1)/2,t1].map((t,i)=>`<text x="${X(t)}" y="${H-5}" text-anchor="${['start','middle','end'][i]}">${esc(xfmt(t))}</text>`).join('');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}"><defs><linearGradient id="ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--text)" stop-opacity=".14"/><stop offset="1" stop-color="var(--text)" stop-opacity="0"/></linearGradient></defs>${g}${s}${xl}</svg>`;
+}
+function barChart(items,{h=150,fmt=v=>eur(v)}={}){
+  const W=340,H=h,pt=18,pb=20,n=items.length;
+  const mx=Math.max(...items.map(i=>i.value),0);
+  if(mx<=0)return `<div class="empty small">Noch keine Daten in diesem Zeitraum.</div>`;
+  const gw=(W)/n,bw=Math.min(22,gw*.62);let s='';
+  items.forEach((it,i)=>{
+    const bh=Math.max(it.value>0?3:0,(H-pt-pb)*it.value/mx);const x=i*gw+(gw-bw)/2,y=H-pb-bh;
+    const last=i===n-1;
+    s+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" rx="${Math.min(6,bw/2)}" fill="${last?'var(--text)':'var(--grey)'}" opacity="${last?1:.45}" style="transform-origin:${x}px ${H-pb}px;animation:grow .8s cubic-bezier(.2,.8,.2,1) both ${i*.03}s"/>`;
+    s+=`<text x="${(x+bw/2).toFixed(1)}" y="${H-5}" text-anchor="middle">${esc(it.label)}</text>`;
+    if(it.value===mx)s+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-5).toFixed(1)}" text-anchor="middle" style="fill:var(--text);font-weight:600">${esc(fmt(it.value))}</text>`;
+  });
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}">${s}</svg>`;
+}
+function donut(segs,center,sub){
+  const tot=sum(segs.map(s=>s.value));if(tot<=0)return '';
+  const r=50,c=2*Math.PI*r;let off=0,s='';
+  segs.forEach(se=>{const l=c*se.value/tot;s+=`<circle cx="66" cy="66" r="${r}" fill="none" stroke="${se.color}" stroke-width="16" stroke-dasharray="${l.toFixed(2)} ${(c-l).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 66 66)"/>`;off+=l});
+  return `<svg viewBox="0 0 132 132"><circle cx="66" cy="66" r="${r}" fill="none" stroke="var(--fill)" stroke-width="16"/>${s}<text x="66" y="64" text-anchor="middle" style="font-size:15px;font-weight:700;fill:var(--text)">${esc(center)}</text><text x="66" y="80" text-anchor="middle" style="font-size:9.5px;fill:var(--sub)">${esc(sub||'')}</text></svg>`;
+}
+const st=document.createElement('style');st.textContent='@keyframes draw{to{stroke-dashoffset:0}}@keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}';document.head.appendChild(st);
+
+/* ============ UI-Bausteine ============ */
+function header(title,eyebrow,right='',back=''){
+  return `<header class="top"><div>${back?`<button class="back" data-act="go" data-v="${back}">${I.chevL}<span>${back==='mehr'?'Mehr':'Zurück'}</span></button>`:''}${eyebrow?`<div class="eyebrow">${esc(eyebrow)}</div>`:''}<h1>${esc(title)}</h1></div>${right}</header>`;
+}
+const addBtn=(t,label='Hinzufügen')=>`<button class="addbtn" data-act="add" data-t="${t}" aria-label="${label}">${I.plus}</button>`;
+const card=(title,body,extra='')=>`<section class="card">${title?`<div class="card-h"><h3>${title}</h3>${extra}</div>`:''}${body}</section>`;
+const tile=(l,v,s,go)=>`<button class="tile" ${go?`data-act="go" data-v="${go}"`:''}><div class="tl">${l}</div><div><div class="tv num">${v}</div>${s?`<div class="ts">${s}</div>`:''}</div></button>`;
+const row=(o)=>`<button class="row" ${o.act?`data-act="${o.act}" data-t="${o.t||''}" data-id="${o.id||''}" data-v="${o.v||''}"`:''}>${o.icon?`<div class="ic">${o.icon}</div>`:''}<div class="row-main"><div class="row-t">${o.title}</div>${o.sub?`<div class="row-s">${o.sub}</div>`:''}</div>${o.right!=null?`<div class="row-r num">${o.right}${o.rsub?`<div class="row-s">${o.rsub}</div>`:''}</div>`:''}${o.chev?`<span class="chev">${I.chevR}</span>`:''}</button>`;
+const kv=(k,v,cls='')=>`<div class="kv"><span>${k}</span><b class="num ${cls}">${v}</b></div>`;
+const empty=(t,btn,act,tt)=>`<div class="empty">${t}${btn?`<div><button class="btn sm" data-act="${act||'add'}" data-t="${tt||''}">${btn}</button></div>`:''}</div>`;
+const progress=(p,cls='')=>`<div class="bar ${cls}"><i data-w="${Math.max(0,Math.min(100,p)).toFixed(1)}"></i></div>`;
+
+function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2200)}
+
+/* ============ Sheet / Formulare ============ */
+let sheetCtx=null;
+function openSheet(inner,{onClose}={}){
+  closeSheet(true);
+  const ov=document.createElement('div');ov.className='overlay';ov.innerHTML=`<div class="sheet" role="dialog">${inner}</div>`;
+  ov.addEventListener('click',e=>{if(e.target===ov)closeSheet()});
+  document.body.appendChild(ov);requestAnimationFrame(()=>requestAnimationFrame(()=>ov.classList.add('show')));
+  sheetCtx={ov,onClose};document.body.style.overflow='hidden';
+  return ov.querySelector('.sheet');
+}
+function closeSheet(instant){
+  if(!sheetCtx)return;const {ov}=sheetCtx;sheetCtx=null;document.body.style.overflow='';
+  if(instant){ov.remove();return}
+  ov.classList.remove('show');setTimeout(()=>ov.remove(),350);
+}
+function askConfirm(text,okLabel,fn){
+  const sh=openSheet(`<div class="sheet-h"><span class="l"></span><h2>Bestätigen</h2><span class="r"></span></div><div class="card" style="animation:none"><p style="margin:0 0 16px;font-size:16px;line-height:1.4">${text}</p><div class="btnrow"><button class="btn ghost" data-x="no">Abbrechen</button><button class="btn danger" data-x="ok">${okLabel}</button></div></div>`);
+  sh.querySelector('[data-x=no]').onclick=()=>closeSheet();
+  sh.querySelector('[data-x=ok]').onclick=()=>{closeSheet();fn()};
+}
+
+function fieldHTML(f,val){
+  const id='f_'+f.k;
+  if(f.section!=null)return null;
+  switch(f.type){
+    case 'select':return `<label class="f"><span>${f.label}</span><select name="${f.k}" id="${id}">${f.options.map(o=>`<option ${String(o)===String(val)?'selected':''}>${esc(o)}</option>`).join('')}</select></label>`;
+    case 'toggle':return `<label class="f"><span>${f.label}</span><span class="sw"><input type="checkbox" name="${f.k}" ${val?'checked':''}><i></i></span></label>`;
+    case 'textarea':return `<label class="f ta"><span>${f.label}</span><textarea name="${f.k}" placeholder="${esc(f.ph||'')}">${esc(val||'')}</textarea></label>`;
+    case 'date':return `<label class="f"><span>${f.label}</span><input type="date" name="${f.k}" value="${esc(val||'')}"></label>`;
+    case 'int':return `<label class="f"><span>${f.label}</span><input type="text" inputmode="numeric" name="${f.k}" value="${val!=null&&val!==''?esc(val):''}" placeholder="${esc(f.ph||'')}">${f.unit?`<span class="unit">${f.unit}</span>`:''}</label>`;
+    case 'dec':return `<label class="f"><span>${f.label}</span><input type="text" inputmode="decimal" name="${f.k}" value="${esc(decStr(val))}" placeholder="${esc(f.ph||'')}">${f.unit?`<span class="unit">${f.unit}</span>`:''}</label>`;
+    case 'docs':return `<div class="f ta"><span>${f.label}</span><div class="docs" id="docs" style="padding:0"></div><div style="margin-top:10px"><span class="btn sm ghost filebtn">${I.doc}<b style="font-weight:600">PDF oder Foto hinzufügen</b><input type="file" id="docInput" accept="image/*,application/pdf" multiple></span></div></div>`;
+    case 'photo':return `<div class="f ta"><span>${f.label}</span><div id="photoPrev" style="margin:4px 0 10px"></div><div class="btnrow"><span class="btn sm ghost filebtn">Foto wählen<input type="file" id="photoInput" accept="image/*"></span><button type="button" class="btn sm ghost" id="photoDel">Entfernen</button></div></div>`;
+    default:return `<label class="f"><span>${f.label}</span><input type="text" name="${f.k}" value="${esc(val||'')}" placeholder="${esc(f.ph||'')}" autocomplete="off"></label>`;
+  }
+}
+function openForm({title,fields,item,onSave,onDelete,hint,after}){
+  const v=item||{};
+  let html='',open=false;
+  fields.forEach(f=>{
+    if(f.section!=null){if(open)html+='</div>';html+=(f.section?`<div class="grp-t">${f.section}</div>`:'')+'<div class="grp">';open=true;return}
+    if(!open){html+='<div class="grp">';open=true}
+    html+=fieldHTML(f,v[f.k]!==undefined?v[f.k]:f.def);
+  });
+  if(open)html+='</div>';
+  const sh=openSheet(`<div class="sheet-h"><button class="l" data-x="cancel">Abbrechen</button><h2>${title}</h2><button class="r" data-x="save">Sichern</button></div>${hint?`<p class="hint" style="margin:0 6px 12px">${hint}</p>`:''}<form id="frm" onsubmit="return false">${html}</form>${onDelete?`<button class="btn danger block" data-x="del" style="margin-top:6px">Eintrag löschen</button>`:''}`);
+  sh.querySelector('[data-x=cancel]').onclick=()=>closeSheet();
+  const collect=(strict)=>{
+    const o={};let bad=null;
+    fields.forEach(f=>{
+      if(f.section!=null||f.type==='docs'||f.type==='photo')return;
+      const el=sh.querySelector(`[name="${f.k}"]`);if(!el)return;
+      let x;
+      if(f.type==='toggle')x=el.checked;
+      else if(f.type==='int')x=parseInt2(el.value);
+      else if(f.type==='dec')x=parseNum(el.value);
+      else x=el.value.trim();
+      el.closest('.f').classList.remove('err');
+      if(strict&&f.req&&(x===null||x===''||x===undefined)){el.closest('.f').classList.add('err');bad=bad||f}
+      o[f.k]=x;
+    });
+    return {o,bad};
+  };
+  sh.querySelector('[data-x=save]').onclick=()=>{
+    const {o,bad}=collect(true);
+    if(bad){toast(`Bitte „${bad.label}“ ausfüllen`);return}
+    const msg=onSave(o);
+    if(msg===false)return;
+    invalidate();persist();closeSheet();render();toast(typeof msg==='string'?msg:'Gespeichert');
+  };
+  if(onDelete)sh.querySelector('[data-x=del]').onclick=()=>askConfirm('Diesen Eintrag wirklich löschen?','Löschen',()=>{onDelete();invalidate();persist();render();toast('Gelöscht')});
+  if(after)after(sh,collect);
+  return sh;
+}
+const upsert=(arr,item,o)=>{if(item&&item.id){Object.assign(arr.find(x=>x.id===item.id),o)}else arr.push({id:uid(),...o})};
+const remove=(k,id)=>{S[k]=S[k].filter(x=>x.id!==id)};
+
+/* Dateien */
+function readAsDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+async function compressImage(file,max=1600,q=.78){
+  const url=URL.createObjectURL(file);
+  try{
+    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url});
+    const s=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q);
+  }catch(e){return await readAsDataURL(file)}finally{URL.revokeObjectURL(url)}
+}
+async function fileToDoc(file){
+  if(file.type.startsWith('image/'))return {id:uid(),name:file.name||'Foto',mime:'image/jpeg',data:await compressImage(file)};
+  if(file.size>15e6){toast('PDF zu groß (max. 15 MB)');return null}
+  return {id:uid(),name:file.name||'Dokument.pdf',mime:file.type||'application/pdf',data:await readAsDataURL(file)};
+}
+function dataURLtoBlob(d){const [h,b]=d.split(',');const m=(h.match(/:(.*?);/)||[])[1]||'application/octet-stream';const bin=atob(b);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new Blob([u],{type:m})}
+function viewDoc(doc){
+  if(doc.mime.startsWith('image/')){
+    openSheet(`<div class="sheet-h"><button class="l" data-x="c">Schließen</button><h2>${esc(doc.name)}</h2><span class="r"></span></div><img src="${doc.data}" style="width:100%;border-radius:14px;display:block">`).querySelector('[data-x=c]').onclick=()=>closeSheet();
+  }else{
+    const url=URL.createObjectURL(dataURLtoBlob(doc.data));
+    openSheet(`<div class="sheet-h"><button class="l" data-x="c">Schließen</button><h2>Dokument</h2><span class="r"></span></div><div class="card" style="animation:none;text-align:center"><div style="font-size:15px;margin-bottom:14px">${esc(doc.name)}</div><a class="btn block" href="${url}" target="_blank" rel="noopener">PDF öffnen</a></div>`).querySelector('[data-x=c]').onclick=()=>closeSheet();
+  }
+}
+
+/* ============ Formulare ============ */
+const F={
+  fuel(item){
+    const last=[...S.fuel].sort((a,b)=>b.km-a.km)[0];
+    openForm({title:item?'Tankvorgang':'Tanken',item,
+      fields:[
+        {k:'date',label:'Datum',type:'date',def:today(),req:1},
+        {k:'km',label:'Kilometerstand',type:'int',unit:'km',def:'',ph:nf(currentKm()),req:1},
+        {section:''},
+        {k:'liters',label:'Liter',type:'dec',unit:'l',ph:'0,00',req:1},
+        {k:'price',label:'Preis pro Liter',type:'dec',unit:'€',ph:'0,000'},
+        {k:'total',label:'Gesamt',type:'dec',unit:'€',ph:'0,00'},
+        {k:'full',label:'Volltankung',type:'toggle',def:true},
+        {section:''},
+        {k:'station',label:'Tankstelle',type:'text',ph:'z. B. Aral Lampertheim',def:last?last.station:''},
+        {k:'type',label:'Kraftstoff',type:'select',options:FUELS,def:last?last.type:S.settings.fuelType}
+      ],
+      hint:'Zwei von drei Werten (Liter, Literpreis, Gesamt) reichen – der dritte wird berechnet. Der Verbrauch wird zwischen zwei Volltankungen ermittelt.',
+      onSave:o=>{
+        if(o.liters&&o.price&&!o.total)o.total=Math.round(o.liters*o.price*100)/100;
+        if(o.liters&&o.total&&!o.price)o.price=Math.round(o.total/o.liters*1000)/1000;
+        if(!o.total){toast('Bitte Literpreis oder Gesamtbetrag angeben');return false}
+        upsert(S.fuel,item,o);
+      },
+      onDelete:item?()=>remove('fuel',item.id):null,
+      after(sh){
+        const g=n=>sh.querySelector(`[name=${n}]`);
+        const upd=e=>{const L=parseNum(g('liters').value),P=parseNum(g('price').value),T=parseNum(g('total').value);
+          if(e.target.name!=='total'&&L&&P)g('total').value=decStr((L*P).toFixed(2));
+          else if(e.target.name==='total'&&L&&T)g('price').value=decStr((T/L).toFixed(3));};
+        ['liters','price','total'].forEach(n=>g(n).addEventListener('input',upd));
+      }
+    });
+  },
+  cost(item){
+    openForm({title:item?'Ausgabe':'Neue Ausgabe',item,
+      fields:[{k:'date',label:'Datum',type:'date',def:today(),req:1},{k:'cat',label:'Kategorie',type:'select',options:CATS.filter(c=>c!=='Tanken'),def:'Versicherung'},
+        {k:'amount',label:'Betrag',type:'dec',unit:'€',req:1,ph:'0,00'},{k:'km',label:'Kilometerstand',type:'int',unit:'km',ph:'optional'},
+        {section:''},{k:'note',label:'Beschreibung',type:'text',ph:'z. B. Haftpflicht + VK 2027'}],
+      hint:'Tankkosten kommen automatisch aus dem Tankbuch, Werkstattkosten aus dem Service-Bereich.',
+      onSave:o=>upsert(S.costs,item,o),onDelete:item?()=>remove('costs',item.id):null});
+  },
+  service(item,preset){
+    let docs=item&&item.docs?[...item.docs]:[];
+    const it=item||{status:preset||'erledigt'};
+    openForm({title:item?it.type:(preset==='geplant'?'Erinnerung':'Service-Eintrag'),item:it,
+      fields:[{k:'type',label:'Art',type:'select',options:SVC_TYPES,def:'Ölwechsel'},{k:'status',label:'Status',type:'select',options:['erledigt','geplant']},
+        {k:'date',label:'Datum / fällig am',type:'date',def:preset==='geplant'?'':today()},{k:'km',label:'Kilometerstand / fällig bei',type:'int',unit:'km'},
+        {section:''},{k:'cost',label:'Kosten',type:'dec',unit:'€',ph:'0,00'},{k:'workshop',label:'Werkstatt',type:'text',ph:'z. B. Porsche Zentrum'},
+        {section:''},{k:'note',label:'Notizen',type:'textarea',ph:'Was wurde gemacht?'},
+        {section:'Rechnungen & Dokumente'},{k:'docs',label:'Belege',type:'docs'}],
+      hint:'„geplant“ = Erinnerung (erscheint im Cockpit). Nach dem Termin auf „erledigt“ stellen.',
+      onSave:o=>{if(o.status==='geplant'&&!o.date&&!o.km){toast('Für eine Erinnerung Datum oder Kilometer angeben');return false}o.docs=docs;upsert(S.service,item,o)},
+      onDelete:item?()=>remove('service',item.id):null,
+      after(sh){
+        const box=sh.querySelector('#docs');
+        const draw=()=>{box.innerHTML=docs.length?docs.map(d=>`<div class="doc" data-d="${d.id}">${d.mime.startsWith('image/')?`<img src="${d.data}">`:'PDF'}<span class="x" data-rm="${d.id}">×</span></div>`).join(''):'<span class="muted small">Noch keine Belege</span>'};
+        draw();
+        box.onclick=e=>{const rm=e.target.closest('[data-rm]');if(rm){e.stopPropagation();docs=docs.filter(d=>d.id!==rm.dataset.rm);draw();return}const d=e.target.closest('[data-d]');if(d){const doc=docs.find(x=>x.id===d.dataset.d);/* Vorschau in neuem Tab */if(doc){const u=URL.createObjectURL(dataURLtoBlob(doc.data));window.open(u,'_blank')}}};
+        sh.querySelector('#docInput').onchange=async e=>{for(const f of e.target.files){const d=await fileToDoc(f);if(d)docs.push(d)}e.target.value='';draw()};
+      }});
+  },
+  trip(item){
+    openForm({title:item?'Fahrt':'Neue Fahrt',item,
+      fields:[{k:'date',label:'Datum',type:'date',def:today(),req:1},{k:'from',label:'Start',type:'text',ph:'Lampertheim'},{k:'to',label:'Ziel',type:'text',ph:'Adresse oder Ort'},
+        {section:''},{k:'kmStart',label:'km bei Start',type:'int',unit:'km',ph:nf(currentKm())},{k:'kmEnd',label:'km bei Ankunft',type:'int',unit:'km'},
+        {section:''},{k:'purpose',label:'Zweck',type:'select',options:PURPOSES},{k:'special',label:'Besondere Reise',type:'toggle'},{k:'name',label:'Name der Reise',type:'text',ph:'z. B. Kosovo-Reise'},
+        {section:''},{k:'note',label:'Notizen',type:'textarea'}],
+      onSave:o=>{if(o.kmStart&&o.kmEnd&&o.kmEnd<o.kmStart){toast('Ankunft-km muss größer als Start-km sein');return false}upsert(S.trips,item,o)},
+      onDelete:item?()=>remove('trips',item.id):null});
+  },
+  plan(item){
+    openForm({title:item?'Sonderfahrt':'Geplante Sonderfahrt',item,
+      fields:[{k:'name',label:'Name',type:'text',ph:'Kosovo-Reise',req:1},{k:'km',label:'Strecke gesamt',type:'int',unit:'km',ph:'5.000',req:1},{k:'date',label:'Reisedatum',type:'date',req:1},{k:'done',label:'Bereits gefahren',type:'toggle'}],
+      hint:'Geplante Sonderfahrten werden zusätzlich zur normalen Wochenleistung in die Prognose eingerechnet. Nach der Reise „bereits gefahren“ aktivieren – dann stecken die km im echten Kilometerstand.',
+      onSave:o=>upsert(S.plans,item,o),onDelete:item?()=>remove('plans',item.id):null});
+  },
+  odo(item){
+    openForm({title:'Kilometerstand',item,
+      fields:[{k:'km',label:'Kilometerstand',type:'int',unit:'km',ph:nf(currentKm()),req:1},{k:'date',label:'Datum',type:'date',def:today(),req:1},{k:'note',label:'Notiz',type:'text',ph:'optional'}],
+      onSave:o=>{if(o.km<+S.car.kmPurchase){toast('Kleiner als der km-Stand beim Kauf');return false}upsert(S.odo,item,o)},onDelete:item?()=>remove('odo',item.id):null});
+  },
+  value(item){
+    openForm({title:item?'Marktwert':'Marktwert eintragen',item,
+      fields:[{k:'value',label:'Marktwert',type:'dec',unit:'€',req:1,ph:nf(valueNow().v)},{k:'date',label:'Datum',type:'date',def:today(),req:1},{k:'km',label:'km-Stand dazu',type:'int',unit:'km',def:item?undefined:currentKm()},{k:'note',label:'Quelle',type:'text',ph:'z. B. mobile.de, Händlerangebot'}],
+      hint:'Dein eingetragener Wert wird zum neuen Ausgangspunkt. Alles danach ist eine Schätzung und wird als solche markiert.',
+      onSave:o=>upsert(S.values,item,o),onDelete:item?()=>remove('values',item.id):null});
+  },
+  finance(){
+    const f=S.finance||{down:10000,amount:Math.max(0,(+S.car.price||0)-10000),rate:4.49,months:36,balloon:'',start:S.car.purchaseDate};
+    openForm({title:'Finanzierung',item:f,
+      fields:[{k:'down',label:'Anzahlung',type:'dec',unit:'€'},{k:'amount',label:'Kreditbetrag',type:'dec',unit:'€',req:1},{k:'rate',label:'Sollzins p. a.',type:'dec',unit:'%',req:1},{k:'months',label:'Laufzeit',type:'int',unit:'Monate',req:1},{k:'balloon',label:'Schlussrate',type:'dec',unit:'€',ph:'0'},{k:'start',label:'Vertragsbeginn',type:'date',req:1}],
+      hint:'Die Monatsrate wird als Annuität mit Schlussrate berechnet. Weicht sie vom Vertrag ab, gilt der Vertrag – ggf. Zins anpassen.',
+      onSave:o=>{S.finance=o},onDelete:S.finance?()=>{S.finance=null}:null});
+  },
+  car(){
+    let photo=S.car.photo;
+    const c={...S.car,features:(S.car.features||[]).join('\n')};
+    openForm({title:'Fahrzeug',item:c,
+      fields:[{section:'Foto'},{k:'photo',label:'Fahrzeugfoto',type:'photo'},
+        {section:'Fahrzeug'},{k:'make',label:'Marke',type:'text'},{k:'model',label:'Modell',type:'text',req:1},{k:'year',label:'Baujahr',type:'int'},{k:'engine',label:'Motor',type:'text'},{k:'ps',label:'Leistung',type:'int',unit:'PS'},{k:'nm',label:'Drehmoment',type:'int',unit:'Nm'},
+        {k:'color',label:'Farbe',type:'text'},{k:'body',label:'Karosserie',type:'text'},{k:'gearbox',label:'Getriebe',type:'text'},{k:'drive',label:'Antrieb',type:'text'},{k:'plate',label:'Kennzeichen',type:'text'},{k:'vin',label:'FIN',type:'text'},
+        {section:'Kauf'},{k:'price',label:'Kaufpreis',type:'dec',unit:'€',req:1},{k:'purchaseDate',label:'Kaufdatum',type:'date',req:1},{k:'kmPurchase',label:'km beim Kauf',type:'int',unit:'km',req:1},
+        {k:'accidentFree',label:'Unfallfrei',type:'toggle'},{k:'serviceBook',label:'Scheckheftgepflegt',type:'toggle'},{k:'warrantyUntil',label:'Garantie bis',type:'date'},
+        {section:'Ausstattung & Zustand'},{k:'features',label:'Eine Zeile pro Merkmal',type:'textarea'}],
+      onSave:o=>{o.features=String(o.features||'').split('\n').map(s=>s.trim()).filter(Boolean);o.photo=photo;Object.assign(S.car,o)},
+      after(sh){
+        const prev=sh.querySelector('#photoPrev');const draw=()=>prev.innerHTML=photo?`<img src="${photo}" style="width:100%;max-height:200px;object-fit:cover;border-radius:12px">`:'<span class="muted small">Kein Foto – es wird eine Silhouette gezeigt.</span>';draw();
+        sh.querySelector('#photoInput').onchange=async e=>{const f=e.target.files[0];if(f){photo=await compressImage(f,1400,.8);draw()}};
+        sh.querySelector('#photoDel').onclick=()=>{photo=null;draw()};
+      }});
+  },
+  assumptions(){
+    openForm({title:'Annahmen',item:S.settings,
+      fields:[{section:'Kilometer'},{k:'weeklyKm',label:'Ø km pro Woche',type:'int',unit:'km',req:1},
+        {section:'Wertschätzung'},{k:'depAge',label:'Wertverlust pro Jahr',type:'dec',unit:'%',req:1},{k:'depKm',label:'Zusätzlich je km',type:'dec',unit:'€',req:1},
+        {section:'Tanken'},{k:'fuelType',label:'Standard-Kraftstoff',type:'select',options:FUELS}],
+      hint:'Die Wochenleistung wird nur genutzt, bis genug echte km-Stände (mind. 3 Wochen) vorliegen. Die Wertschätzung ist ein einfaches Modell (Alter + Laufleistung) – trag echte Marktwerte ein, sobald du Angebote siehst.',
+      onSave:o=>Object.assign(S.settings,o)});
+  }
+};
+F.add=t=>F[t]&&F[t]();
+
+/* ============ Ansichten ============ */
+const V={};
+V.setup=()=>{
+  const c=S.car;
+  return `<div class="setup">${header('Deine Garage','Willkommen')}
+  <div class="hero"><div class="brand">${esc(c.make)}</div><div class="model">${esc(c.model)}</div><div class="meta">${esc(c.year)} · ${esc(c.engine)} · ${esc(c.ps)} PS · ${esc(c.color)}</div>${CAR_SVG}
+  <div class="feat">${c.features.map(f=>`<span>${esc(f)}</span>`).join('')}</div></div>
+  <div class="grp-t">Einrichtung</div>
+  <div class="grp">
+    <label class="f"><span>Kaufdatum</span><input type="date" id="s_date" value="${esc(c.purchaseDate)}"></label>
+    <label class="f"><span>Kaufpreis</span><input type="text" inputmode="decimal" id="s_price" value="${esc(decStr(c.price))}"><span class="unit">€</span></label>
+    <label class="f"><span>km beim Kauf</span><input type="text" inputmode="numeric" id="s_kmp" value="${esc(c.kmPurchase)}"><span class="unit">km</span></label>
+    <label class="f"><span>km heute</span><input type="text" inputmode="numeric" id="s_kmn" placeholder="${esc(c.kmPurchase)}"><span class="unit">km</span></label>
+    <label class="f"><span>Garantie bis</span><input type="date" id="s_war" value="${esc(addMonths(c.purchaseDate,12))}"></label>
+    <label class="f"><span>Ø km pro Woche</span><input type="text" inputmode="numeric" id="s_wk" value="${esc(S.settings.weeklyKm)}"><span class="unit">km</span></label>
+  </div>
+  <p class="hint">Die Fahrzeugdaten sind vorausgefüllt und jederzeit unter „Mehr → Fahrzeug“ änderbar. Es werden keine Beispieldaten angelegt.</p>
+  ${storageWarning()}
+  <button class="btn block" data-act="finishSetup" style="margin-top:6px">Garage einrichten</button>
+  <div style="height:10px"></div>
+  <span class="btn block ghost filebtn">Backup wiederherstellen<input type="file" accept="application/json,.json" data-import="1"></span></div>`;
+};
+function storageWarning(){
+  if(Store.mode==='memory')return `<div class="warnbox"><b>Speichern ist in dieser Ansicht nicht möglich.</b> Deine Daten gehen beim Schließen verloren. Öffne die App im Safari-Browser und füge sie zum Home-Bildschirm hinzu – oder exportiere regelmäßig ein Backup.</div>`;
+  return '';
+}
+
+V.cockpit=()=>{
+  const c=S.car,cur=currentKm(),vn=valueNow(),cs=costStats(),fs=fuelStats(),w=weeklyRate();
+  const loss=(+c.price||0)-vn.v;
+  // km-Verlauf
+  const pts=[];const start=pd(c.purchaseDate);const now=new Date();
+  const s0=new Date(Math.max(start.getTime(),new Date(now.getFullYear(),now.getMonth()-11,1).getTime()));
+  pts.push({t:s0.getTime(),y:kmAt(iso(s0))});
+  for(let d=new Date(s0.getFullYear(),s0.getMonth()+1,1);d<now;d=new Date(d.getFullYear(),d.getMonth()+1,1))pts.push({t:d.getTime(),y:kmAt(iso(d))});
+  pts.push({t:Date.now(),y:Math.max(cur,kmAt(today()))});
+  const proj=[{t:Date.now(),y:pts[pts.length-1].y}];for(let m=1;m<=6;m++){const d=addMonths(today(),m);proj.push({t:ts(d),y:projectKm(d)})}
+  const up=upcoming().slice(0,3);
+  return `${header(c.model,c.make,`<button class="iconbtn" data-act="go" data-v="fahrzeug" aria-label="Fahrzeug">${I.car}</button>`)}
+  ${storageWarning()}
+  <section class="hero">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div><div class="brand">${esc(c.color)} · ${esc(c.year)}</div><div class="meta">${esc(c.engine)} · ${esc(c.ps)} PS · ${esc(c.nm)} Nm</div></div>${c.plate?`<span class="badge">${esc(c.plate)}</span>`:''}</div>
+    <label class="carpick">${c.photo?`<img class="carimg" src="${c.photo}" alt="">`:CAR_SVG+'<span class="carhint">Eigenes Foto hinzufügen</span>'}<input type="file" accept="image/*" data-carphoto="1"></label>
+    <div class="kmrow"><div><div class="label">Kilometerstand</div><div class="km num" data-count="${cur}">${nf(cur)}<small>km</small></div></div><button class="pill" data-act="add" data-t="odo">${I.edit.replace('<svg','<svg width="15" height="15"')} km-Stand</button></div>
+    <div class="stats">
+      <div><b class="num">${eur(+c.price)}</b><span>Kaufpreis</span></div>
+      <button data-act="go" data-v="wert" style="text-align:left"><b class="num">${eur(Math.round(vn.v/100)*100)}</b><span>${vn.estimated?'Schätzwert':'Akt. Wert'}</span></button>
+      <div><b class="num">${nf(kmSincePurchase())}</b><span>km seit Kauf</span></div>
+    </div>
+  </section>
+  <div class="tiles three">
+    ${tile('Woche',nf(drivenSince(startOfWeek())),'km','kilometer')}
+    ${tile('Monat',nf(drivenSince(startOfMonth())),'km','kilometer')}
+    ${tile('Jahr',nf(drivenSince(startOfYear())),'km','kilometer')}
+  </div>
+  <div class="tiles three">
+    ${tile('Gesamtkosten',eur(cs.total),'seit Kauf','kosten')}
+    ${tile('Ø Verbrauch',fs.l100?nf(fs.l100,1):'–','l / 100 km','tanken')}
+    ${tile('Kosten / km',cs.perKm!=null?nf(cs.perKm,2)+' €':'–','ohne Wertverlust','kosten')}
+  </div>
+  ${card('Kilometerentwicklung',lineChart([{points:pts,area:true},{points:proj,dashed:true,color:'var(--grey)'}],{fmt:v=>nf(v/1000,0)+' Tsd.'})+`<div class="note">Gestrichelt: Prognose 6 Monate (${nf(w.v)} km/Woche, ${w.src}${plannedKm(today(),addMonths(today(),6))?' + geplante Sonderfahrten':''}).</div>`,`<button class="link" data-act="go" data-v="kilometer">Details</button>`)}
+  ${card('Nächste Termine',up.length?`<div class="list">${up.map(x=>row({act:x.kind==='warranty'?'go':'edit',t:'service',id:x.id,v:'service',icon:x.kind==='warranty'?I.shield:I.wrench,title:esc(x.type),sub:`<span class="${dueClass(x)}">${dueText(x)}</span>`,chev:1})).join('')}</div>`:empty('Keine Termine geplant.','Erinnerung anlegen','addReminder'),`<button class="link" data-act="go" data-v="service">Alle</button>`)}
+  ${card('Wertentwicklung',`<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px"><div><div class="big num">${eur(Math.round(vn.v/100)*100)}</div><div class="muted small">${vn.estimated?'<span class="badge">Schätzung</span> ':''}aktueller Wert</div></div><div style="text-align:right"><div class="delta num ${loss>0?'bad':'good'}">${loss>0?'−':'+'}${eur(Math.abs(Math.round(loss/100)*100))}</div><div class="muted small">${pct(-(loss)/(+c.price||1)*100)}</div></div></div>`,`<button class="link" data-act="go" data-v="wert">Details</button>`)}`;
+};
+
+V.tanken=()=>{
+  const fs=fuelStats();
+  const items=S.fuel.map(f=>({date:f.date,amount:+f.total||0}));
+  const sorted=[...S.fuel].sort((a,b)=>ts(b.date)-ts(a.date)||b.km-a.km);
+  let list='',lastM='';
+  sorted.forEach(f=>{const m=monthKey(f.date);if(m!==lastM){const mt=sum(S.fuel.filter(x=>monthKey(x.date)===m).map(x=>x.total));const d=pd(f.date);list+=`<div class="monthhead"><span>${MONL[d.getMonth()]} ${d.getFullYear()}</span><span class="num">${eur(mt,2)}</span></div>`;lastM=m}
+    const p=fs.per[f.id];list+=row({act:'edit',t:'fuel',id:f.id,icon:I.fuel,title:esc(f.station||f.type||'Tankstelle'),sub:`${fdateS(f.date)} · ${nf(f.liters,2)} l · ${nf(f.price,3)} €/l${f.full?'':' · Teil'}`,right:eur(f.total,2),rsub:p?nf(p.l100,1)+' l/100':''})});
+  return `${header('Tankbuch','',addBtn('fuel','Tanken'))}
+  <div class="tiles">
+    ${tile('Ø Verbrauch',fs.l100?nf(fs.l100,1)+' l':'–','pro 100 km')}
+    ${tile('Kosten / 100 km',fs.c100?eur(fs.c100,2):'–','nur Kraftstoff')}
+    ${tile('Ø Literpreis',fs.ppl?nf(fs.ppl,3)+' €':'–',fs.count?`${fs.count} Tankvorgänge`:'')}
+    ${tile('Dieser Monat',eur(fs.month,0),'Dieses Jahr: '+eur(fs.year,0))}
+  </div>
+  ${card('Tankkosten pro Monat',barChart(monthlySeries(items)))}
+  ${S.fuel.length?`<div class="list">${list}</div>`:`<div class="list">${empty('Noch keine Tankvorgänge.<br>Tipp: Immer volltanken – dann ist der Verbrauch exakt.','Erste Tankfüllung','add','fuel')}</div>`}
+  <p class="note" style="margin:4px 6px">Verbrauch wird ab der zweiten Volltankung berechnet; Teilbetankungen dazwischen werden korrekt mitgezählt.</p>`;
+};
+
+let costMode='Monat',costFilter='Alle';
+V.kosten=()=>{
+  const cs=costStats();
+  const byCat=CATS.map((c,i)=>({label:c,value:sum(cs.all.filter(x=>x.cat===c).map(x=>x.amount)),color:CAT_COLORS[i]})).filter(x=>x.value>0).sort((a,b)=>b.value-a.value);
+  const series=costMode==='Monat'?monthlySeries(cs.all):yearlySeries(cs.all);
+  const filtered=costFilter==='Alle'?cs.all:cs.all.filter(x=>x.cat===costFilter);
+  const usedCats=['Alle',...CATS.filter(c=>cs.all.some(x=>x.cat===c))];
+  return `${header('Kosten','','<span>'+addBtn('cost','Ausgabe')+'</span>','mehr')}
+  <div class="tiles">
+    ${tile('Seit Kauf',eur(cs.total),'alle Kategorien')}
+    ${tile('Ø pro Monat',eur(cs.perMonth),'seit Kauf')}
+    ${tile('Pro Kilometer',cs.perKm!=null?nf(cs.perKm,2)+' €':'–',km(kmSincePurchase())+' gefahren')}
+    ${tile('Dieses Jahr',eur(cs.year),'Monat: '+eur(cs.month))}
+  </div>
+  ${card('Verlauf',`<div class="seg">${['Monat','Jahr'].map(m=>`<button class="${m===costMode?'on':''}" data-act="costMode" data-v="${m}">${m==='Monat'?'Monatlich':'Jährlich'}</button>`).join('')}</div>${barChart(series)}`)}
+  ${byCat.length?card('Nach Kategorie',`<div class="donutwrap">${donut(byCat,eur(cs.total),'gesamt')}<div style="flex:1;min-width:0">${byCat.slice(0,6).map(s=>`<div class="kv" style="padding:6px 0;font-size:13.5px"><span style="display:flex;align-items:center;gap:7px;min-width:0"><i style="width:9px;height:9px;border-radius:3px;background:${s.color};flex:none"></i><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.label)}</span></span><b>${nf(s.value/cs.total*100,0)} %</b></div>`).join('')}</div></div>${byCat.length>6?`<div class="legend">${byCat.slice(6).map(s=>`<div><i style="background:${s.color}"></i><span>${esc(s.label)}</span><b class="num">${eur(s.value)}</b></div>`).join('')}</div>`:''}`):''}
+  <div class="chips">${usedCats.map(c=>`<button class="chip ${c===costFilter?'on':''}" data-act="costFilter" data-v="${esc(c)}">${esc(c)}</button>`).join('')}</div>
+  <div class="list">${filtered.length?filtered.map(x=>row({act:'editCost',t:x.src,id:x.id,title:esc(x.cat),sub:`${fdate(x.date)}${x.note?' · '+esc(x.note):''}${x.src!=='cost'?` · <span class="muted">${x.src==='fuel'?'Tankbuch':'Service'}</span>`:''}`,right:eur(x.amount,2)})).join(''):empty('Noch keine Ausgaben.','Ausgabe hinzufügen','add','cost')}</div>
+  <p class="note" style="margin:4px 6px">Finanzierungsraten und Wertverlust sind hier nicht enthalten – die findest du unter „Wert“ und „Finanzierung“.</p>`;
+};
+
+V.service=()=>{
+  const up=upcoming();
+  const done=S.service.filter(s=>s.status==='erledigt').sort((a,b)=>ts(b.date)-ts(a.date));
+  const c=S.car;let war='';
+  if(c.warrantyUntil){const dl=daysBetween(today(),c.warrantyUntil);const total=Math.max(1,daysBetween(c.purchaseDate,c.warrantyUntil));
+    war=card('Porsche Approved Garantie',`<div style="display:flex;justify-content:space-between;align-items:flex-end"><div><div class="big num">${dl>=0?nf(dl):'0'}</div><div class="muted small">Tage verbleibend</div></div><span class="badge ${dl<0?'bad':dl<=60?'warn':'good'}">${dl<0?'abgelaufen':'bis '+fdate(c.warrantyUntil)}</span></div>${progress(100-dl/total*100,dl<=60?'warn':'')}<div class="note">Verlängerung rechtzeitig vor Ablauf beim Porsche Zentrum anfragen – das Fahrzeug muss dafür in der Regel geprüft werden.</div>`,`<button class="link" data-act="add" data-t="car">Ändern</button>`)}
+  else war=card('Porsche Approved Garantie',empty('Ablaufdatum noch nicht hinterlegt.','Datum eintragen','add','car'));
+  return `${header('Service','',addBtn('service','Service'))}
+  <div class="btnrow" style="margin-bottom:14px"><button class="btn ghost sm" data-act="add" data-t="service">${I.wrench.replace('<svg','<svg width="17" height="17"')} Eintrag</button><button class="btn ghost sm" data-act="addReminder">${I.flag.replace('<svg','<svg width="17" height="17"')} Erinnerung</button></div>
+  ${war}
+  <div class="sectiontitle">Anstehend</div>
+  <div class="list">${up.filter(x=>x.kind!=='warranty').length?up.filter(x=>x.kind!=='warranty').map(x=>row({act:'edit',t:'service',id:x.id,icon:I.flag,title:esc(x.type)+(x.note?` · <span class="muted">${esc(x.note)}</span>`:''),sub:`<span class="${dueClass(x)}">${dueText(x)}</span>`,right:`<span class="btn sm ghost" data-act="markDone" data-id="${x.id}">Erledigt</span>`})).join(''):empty('Keine Erinnerungen. Lege z. B. TÜV, Ölwechsel oder Inspektion an.','Erinnerung anlegen','addReminder')}</div>
+  <div class="sectiontitle">Historie</div>
+  <div class="list">${done.length?done.map(s=>row({act:'edit',t:'service',id:s.id,icon:I.wrench,title:esc(s.type),sub:`${fdate(s.date)}${s.km?' · '+km(s.km):''}${s.workshop?' · '+esc(s.workshop):''}${s.docs&&s.docs.length?` · ${s.docs.length} Beleg${s.docs.length>1?'e':''}`:''}`,right:s.cost?eur(+s.cost,2):''})).join(''):empty('Noch keine Einträge. Ölwechsel, Inspektionen, Bremsen, Reifen – alles mit Rechnung als PDF oder Foto.','Ersten Eintrag anlegen','add','service')}</div>`;
+};
+
+V.kilometer=()=>{
+  const w=weeklyRate(),cur=currentKm(),y=new Date().getFullYear();
+  const kmY=drivenSince(startOfYear()),yearEnd=projectKm(endOfYear()),plan=yearPlan();
+  const pr=plan>0?kmY/plan*100:0;
+  const plans=[...S.plans].sort((a,b)=>ts(a.date)-ts(b.date));
+  const trips=[...S.trips].sort((a,b)=>ts(b.date)-ts(a.date));
+  const special=trips.filter(t=>t.special),normal=trips.filter(t=>!t.special);
+  const tripRow=t=>row({act:'edit',t:'trip',id:t.id,icon:t.special?I.flag:I.pin,title:esc(t.special&&t.name?t.name:[t.from,t.to].filter(Boolean).join(' → ')||'Fahrt'),sub:`${fdate(t.date)} · ${esc(t.purpose||'')}${t.special&&t.name&&(t.from||t.to)?' · '+esc([t.from,t.to].filter(Boolean).join(' → ')):''}`,right:tripKm(t)?km(tripKm(t)):''});
+  return `${header('Kilometer & Fahrten','','','mehr')}
+  <div class="tiles three">
+    ${tile('Pro Woche',nf(w.v),w.src==='gemessen'?'gemessen':'Annahme')}
+    ${tile('Pro Monat',nf(w.v*52/12),'km')}
+    ${tile('Pro Jahr',nf(w.v*52),'km')}
+  </div>
+  ${card('Jahresplan '+y,`<div style="display:flex;justify-content:space-between;align-items:flex-end"><div><div class="big num">${nf(kmY)}</div><div class="muted small">von ${km(plan)} geplant</div></div><div style="text-align:right"><div class="delta num">${nf(pr,0)} %</div><div class="muted small">erreicht</div></div></div>${progress(pr,pr>100?'warn':'')}${kv('Hochrechnung Jahresende',km(yearEnd))+kv('Davon noch zu fahren',km(Math.max(0,yearEnd-cur)))}`)}
+  ${card('Prognose Kilometerstand',[6,12,24].map(m=>{const d=addMonths(today(),m);const pk=plannedKm(today(),d);return kv(`In ${m} Monaten <span class="small">(${fdate(d)})</span>`,km(Math.round(projectKm(d)/100)*100)+(pk?`<div class="small muted" style="font-weight:400">inkl. ${km(pk)} Sonderfahrten</div>`:''))}).join('')+`<div class="note">Basis: ${km(cur)} heute, ${nf(w.v)} km/Woche (${w.src==='gemessen'?'aus deinen echten km-Ständen, Sonderfahrten herausgerechnet':'deine Annahme, bis 3 Wochen echte Daten vorliegen'}).</div>`,`<button class="link" data-act="add" data-t="assumptions">Annahme</button>`)}
+  ${card('Geplante Sonderfahrten',plans.length?`<div class="list">${plans.map(p=>row({act:'edit',t:'plan',id:p.id,icon:I.flag,title:esc(p.name),sub:`${fdate(p.date)} · ${p.done?'gefahren':'in Prognose enthalten'}`,right:km(p.km)})).join('')}</div>`:empty('Z. B. Kosovo-Reise mit 5.000 km – wird zusätzlich zur Wochenleistung eingeplant.','Sonderfahrt planen','add','plan'),plans.length?addBtn('plan'):'')}
+  <div class="sectiontitle" style="display:flex;justify-content:space-between;align-items:center"><span>Fahrtenbuch</span><button class="link" style="text-transform:none;letter-spacing:0" data-act="add" data-t="trip">+ Fahrt</button></div>
+  ${special.length?`<div class="list">${special.map(tripRow).join('')}</div>`:''}
+  <div class="list">${normal.length?normal.map(tripRow).join(''):empty(special.length?'Keine weiteren Fahrten.':'Noch keine Fahrten eingetragen.','Fahrt eintragen','add','trip')}</div>
+  <div class="sectiontitle" style="display:flex;justify-content:space-between;align-items:center"><span>km-Stände</span><button class="link" style="text-transform:none;letter-spacing:0" data-act="add" data-t="odo">+ km-Stand</button></div>
+  <div class="list">${[...S.odo].sort((a,b)=>ts(b.date)-ts(a.date)).map(o=>row({act:'edit',t:'odo',id:o.id,icon:I.odo,title:km(o.km),sub:fdate(o.date)+(o.note?' · '+esc(o.note):'')})).join('')||empty('Tipp: Einmal pro Woche den km-Stand eintragen – dann rechnet die App mit deinen echten Werten.')}</div>`;
+};
+
+let simPrice=null,simDate=null;
+V.wert=()=>{
+  const c=S.car,vn=valueNow(),price=+c.price||0,loss=price-vn.v,cur=currentKm();
+  const hist=[{t:ts(c.purchaseDate),y:price},...[...S.values].sort((a,b)=>ts(a.date)-ts(b.date)).map(v=>({t:ts(v.date),y:+v.value}))];
+  const fc=[{t:Date.now(),y:vn.v}];const yrs=[];
+  for(let i=1;i<=5;i++){const d=addMonths(today(),12*i);const k=projectKm(d);const v=estValue(d,k);fc.push({t:ts(d),y:v});yrs.push({d,k,v})}
+  if(simPrice==null)simPrice=Math.round(vn.v/500)*500;if(!simDate)simDate=today();
+  return `${header('Wert & Verkauf','',addBtn('value','Marktwert'),'mehr')}
+  <section class="hero" style="padding-bottom:20px">
+    <div class="label">${vn.estimated?'Geschätzter Marktwert':'Dein Marktwert'} ${vn.estimated?'<span class="badge">Schätzung</span>':''}</div>
+    <div class="km num">${nf(Math.round(vn.v/100)*100)}<small>€</small></div>
+    <div class="stats"><div><b class="num">${eur(price)}</b><span>Kaufpreis</span></div><div><b class="num" style="color:${loss>0?'#ff8a80':'#7be0a0'}">${loss>0?'−':'+'}${eur(Math.abs(Math.round(loss/100)*100))}</b><span>Wertverlust</span></div><div><b class="num">${pct(price?loss/price*100:0)}</b><span>in Prozent</span></div></div>
+  </section>
+  ${card('Wertentwicklung',lineChart([{points:hist,dots:true,area:hist.length>1},{points:fc,dashed:true,color:'var(--grey)'}],{fmt:v=>nf(v/1000,0)+' Tsd.',xfmt:t=>String(new Date(t).getFullYear())})+`<div class="note">Durchgezogen: Kaufpreis und deine eingetragenen Marktwerte. Gestrichelt: Schätzung (${nf(S.settings.depAge,1)} %/Jahr + ${nf(S.settings.depKm,2)} €/km).</div>`)}
+  ${card('Prognose <span class="badge">Schätzung</span>',yrs.map(y=>kv(`${pd(y.d).getFullYear()} <span class="small">· ${nf(Math.round(y.k/1000))} Tsd. km</span>`,eur(Math.round(y.v/500)*500))).join(''),`<button class="link" data-act="add" data-t="assumptions">Modell</button>`)}
+  ${card('Kilometerabhängig <span class="badge">Schätzung</span>',[0,10000,20000,30000,50000].map(a=>kv(a?`+${nf(a)} km <span class="small">(${nf(Math.round((cur+a)/1000))} Tsd.)</span>`:'Heute',eur(Math.round(estValue(today(),cur+a)/500)*500),a?'bad':'')).join('')+`<div class="note">Gleicher Zeitpunkt, nur mehr Kilometer – zeigt, was dich jeder gefahrene km am Wiederverkauf kostet.</div>`)}
+  ${card('Verkauf simulieren',`<div class="grp" style="background:var(--card2)"><label class="f"><span>Verkaufspreis</span><input data-live="sim" id="simPrice" type="text" inputmode="decimal" value="${esc(decStr(simPrice))}"><span class="unit">€</span></label><label class="f"><span>Verkaufsdatum</span><input data-live="sim" id="simDate" type="date" value="${esc(simDate)}"></label></div><div id="simOut">${simOut()}</div>`)}
+  ${card('Eingetragene Marktwerte',S.values.length?`<div class="list">${[...S.values].sort((a,b)=>ts(b.date)-ts(a.date)).map(v=>row({act:'edit',t:'value',id:v.id,icon:I.tag,title:eur(+v.value),sub:fdate(v.date)+(v.note?' · '+esc(v.note):'')+(v.km?' · '+km(v.km):'')})).join('')}</div>`:empty('Trag ein, was vergleichbare Panamera GTS gerade kosten (z. B. mobile.de) – das macht die Schätzung deutlich genauer.','Marktwert eintragen','add','value'))}`;
+};
+function simOut(){
+  const c=S.car,price=+c.price||0,sp=simPrice||0,d=simDate||today();
+  const kmD=ts(d)>Date.now()?projectKm(d):kmAt(d);
+  const driven=Math.max(0,kmD-(+c.kmPurchase||0));
+  const costs=costStats().total;
+  const fin=finCalc(S.finance,d);
+  const interest=fin?fin.interestPaid:0;
+  const gain=sp-price;const tco=price-sp+costs+interest;
+  const est=estValue(d,kmD);
+  let h=kv('Gewinn / Verlust ggü. Kaufpreis',`${gain>=0?'+':'−'}${eur(Math.abs(gain))}`,gain>=0?'good':'bad');
+  h+=kv('Schätzwert zu dem Zeitpunkt',eur(Math.round(est/500)*500)+' <span class="badge">Schätzung</span>');
+  h+=kv('Bisherige laufende Kosten',eur(costs));
+  if(fin)h+=kv('Bezahlte Zinsen bis dahin',eur(interest));
+  h+=kv('<b style="color:var(--text)">Echte Gesamtkosten des Autos</b>',eur(tco));
+  if(driven>0)h+=kv('Pro gefahrenem Kilometer',nf(tco/driven,2)+' €');
+  if(fin)h+=kv('Restschuld bei Verkauf',eur(fin.rest))+kv('Bleibt nach Ablösung',eur(sp-fin.rest),sp-fin.rest>=0?'good':'bad');
+  if(ts(d)>Date.now())h+=`<div class="note">Kosten bis heute; zukünftige Kosten sind nicht eingerechnet. km zum Verkaufsdatum geschätzt: ${km(kmD)}.</div>`;
+  return h;
+}
+
+V.finanzierung=()=>{
+  const f=S.finance;
+  if(!f)return `${header('Finanzierung','','','mehr')}${card('',empty('Noch keine Finanzierung hinterlegt. Mit Kreditbetrag, Zins, Laufzeit und Schlussrate siehst du Monatsrate, Restschuld und Zinskosten.','Finanzierung einrichten','add','finance'))}`;
+  const r=finCalc(f);const vn=valueNow();const eq=vn.v-r.rest;
+  return `${header('Finanzierung','',`<button class="iconbtn" data-act="add" data-t="finance" aria-label="Bearbeiten">${I.edit}</button>`,'mehr')}
+  <div class="tiles">
+    ${tile('Monatsrate',eur(r.pay,2),`${r.n} Monate · ${nf(f.rate,2)} %`)}
+    ${tile('Restschuld heute',eur(r.rest),`nach ${r.k} Raten`)}
+    ${tile('Schlussrate',eur(r.balloon),'fällig '+fdate(r.end))}
+    ${tile('Zinsen gesamt',eur(r.totalInterest),'bisher '+eur(r.interestPaid))}
+  </div>
+  ${card('Laufzeit',`${progress(r.k/r.n*100)}<div class="muted small">${r.k} von ${r.n} Raten · Ende ${fdate(r.end)}</div>`)}
+  ${card('Wert vs. Restschuld',kv('Fahrzeugwert '+(vn.estimated?'<span class="badge">Schätzung</span>':''),eur(vn.v))+kv('Restschuld',eur(r.rest))+kv('<b style="color:var(--text)">Eigenkapital im Auto</b>',eur(eq),eq>=0?'good':'bad')+kv('Schlussrate vs. Wert bei Ende',eur(estValue(r.end,projectKm(r.end))-r.balloon),estValue(r.end,projectKm(r.end))-r.balloon>=0?'good':'bad')+`<div class="note">Liegt der geschätzte Wert bei Vertragsende unter der Schlussrate, musst du beim Verkauf draufzahlen oder anschlussfinanzieren.</div>`)}
+  ${card('Übersicht',kv('Anzahlung',eur(+f.down||0))+kv('Kreditbetrag',eur(+f.amount))+kv('Bereits gezahlt (Raten)',eur(r.paid))+kv('Gesamtaufwand Finanzierung',eur(r.pay*r.n+r.balloon+(+f.down||0))))}`;
+};
+
+V.fahrzeug=()=>{
+  const c=S.car;
+  return `${header('Fahrzeug','',`<button class="iconbtn" data-act="add" data-t="car" aria-label="Bearbeiten">${I.edit}</button>`,'cockpit')}
+  <section class="hero"><div class="brand">${esc(c.make)}</div><div class="model">${esc(c.model)}</div>${c.photo?`<img class="carimg" src="${c.photo}" alt="">`:CAR_SVG}<div class="feat">${(c.features||[]).map(f=>`<span>${esc(f)}</span>`).join('')}</div></section>
+  ${card('Technik',kv('Baujahr',esc(c.year))+kv('Motor',esc(c.engine))+kv('Leistung',esc(c.ps)+' PS')+kv('Drehmoment',esc(c.nm)+' Nm')+kv('Getriebe',esc(c.gearbox))+kv('Antrieb',esc(c.drive))+kv('Karosserie',esc(c.body))+kv('Farbe',esc(c.color))+(c.plate?kv('Kennzeichen',esc(c.plate)):'')+(c.vin?kv('FIN',esc(c.vin)):''))}
+  ${card('Kauf & Zustand',kv('Kaufpreis',eur(+c.price))+kv('Kaufdatum',fdate(c.purchaseDate))+kv('km beim Kauf',km(c.kmPurchase))+kv('Unfallfrei',c.accidentFree?'Ja':'Nein')+kv('Scheckheftgepflegt',c.serviceBook?'Ja':'Nein')+kv('Garantie bis',fdate(c.warrantyUntil)))}
+  <button class="btn block" data-act="add" data-t="car">Fahrzeugprofil bearbeiten</button>`;
+};
+
+V.mehr=()=>`${header('Mehr')}
+  <div class="list">
+    ${row({act:'go',v:'wert',icon:I.chart,title:'Wert & Verkauf',sub:'Marktwert, Prognose, Verkaufssimulation',chev:1})}
+    ${row({act:'go',v:'kosten',icon:I.euro,title:'Kosten',sub:eur(costStats().total)+' seit Kauf',chev:1})}
+    ${row({act:'go',v:'kilometer',icon:I.road,title:'Kilometer & Fahrten',sub:'Prognose, Sonderfahrten, Fahrtenbuch',chev:1})}
+    ${row({act:'go',v:'finanzierung',icon:I.bank,title:'Finanzierung',sub:S.finance?'Rate '+eur(finCalc(S.finance).pay,2)+' / Monat':'Noch nicht eingerichtet',chev:1})}
+  </div>
+  <div class="list">
+    ${row({act:'go',v:'fahrzeug',icon:I.car,title:'Fahrzeugprofil',sub:esc(S.car.make+' '+S.car.model),chev:1})}
+    ${row({act:'go',v:'daten',icon:I.data,title:'Daten, Export & Darstellung',sub:'Backup, Excel, PDF, Hell/Dunkel',chev:1})}
+  </div>
+  <p class="note" style="text-align:center;margin-top:18px">Alle Daten liegen nur auf diesem Gerät.</p>`;
+
+V.daten=()=>{
+  const t=S.settings.theme;
+  const counts=`${S.fuel.length} Tankvorgänge · ${allCosts().length} Kostenposten · ${S.service.length} Service · ${S.trips.length} Fahrten`;
+  return `${header('Daten & Export','','','mehr')}
+  ${card('Darstellung',`<div class="seg" style="margin:0">${[['auto','Automatisch'],['light','Hell'],['dark','Dunkel']].map(([k,l])=>`<button class="${t===k?'on':''}" data-act="theme" data-v="${k}">${l}</button>`).join('')}</div>`)}
+  ${card('Annahmen',kv('Ø km pro Woche',km(S.settings.weeklyKm))+kv('Wertverlust pro Jahr',pct(S.settings.depAge))+kv('Wertverlust je km',nf(S.settings.depKm,2)+' €'),`<button class="link" data-act="add" data-t="assumptions">Ändern</button>`)}
+  ${card('Backup',`<p class="muted small" style="margin:0 0 12px">${counts}</p><div class="btnrow"><button class="btn" data-act="exportJSON">Backup sichern</button><button class="btn ghost" data-act="copyJSON">Kopieren</button></div><div style="height:10px"></div><span class="btn ghost block filebtn">Backup wiederherstellen<input type="file" accept="application/json,.json" data-import="1"></span><div class="note">Mach regelmäßig ein Backup (z. B. in iCloud Drive). Fotos und PDFs sind enthalten.</div>`)}
+  ${card('Export',`<div class="btnrow"><button class="btn ghost" data-act="exportCSV">Excel (CSV)</button><button class="btn ghost" data-act="printReport">PDF-Bericht</button></div><div class="note">CSV öffnet sich direkt in Excel und Numbers. PDF: im Druckdialog „Als PDF sichern“ bzw. auf dem iPhone mit zwei Fingern auf die Vorschau zoomen und teilen.</div>`)}
+  ${card('Speicher',kv('Speicherort',{idb:'Gerät (IndexedDB)',ls:'Gerät (lokal)',memory:'<span class="bad">nicht verfügbar</span>'}[Store.mode])+`<div style="height:12px"></div><button class="btn danger block" data-act="wipe">Alle Daten löschen</button>`)}`;
+};
+
+/* ============ Export ============ */
+function download(name,blob){
+  try{const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(u);a.remove()},2000);toast('Export erstellt')}catch(e){toast('Download hier nicht möglich – „Kopieren“ nutzen')}
+}
+function csv(){
+  const q=v=>{v=v==null?'':String(v);return /[";\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+  const n=v=>v==null||v===''?'':String(v).replace('.',',');
+  const lines=[];const sec=(t,h,rows)=>{lines.push(t);lines.push(h.join(';'));rows.forEach(r=>lines.push(r.map(q).join(';')));lines.push('')};
+  sec('TANKBUCH',['Datum','km','Liter','€/Liter','Gesamt €','Tankstelle','Kraftstoff','Voll'],[...S.fuel].sort((a,b)=>ts(a.date)-ts(b.date)).map(f=>[fdate(f.date),f.km,n(f.liters),n(f.price),n(f.total),f.station,f.type,f.full?'ja':'nein']));
+  sec('KOSTEN (alle)',['Datum','Kategorie','Betrag €','Beschreibung','Quelle'],allCosts().reverse().map(c=>[fdate(c.date),c.cat,n(c.amount),c.note,{cost:'Kostenbuch',fuel:'Tankbuch',service:'Service'}[c.src]]));
+  sec('SERVICE',['Status','Art','Datum','km','Kosten €','Werkstatt','Notiz','Belege'],S.service.map(s=>[s.status,s.type,fdate(s.date),s.km,n(s.cost),s.workshop,s.note,(s.docs||[]).length]));
+  sec('FAHRTEN',['Datum','Start','Ziel','km Start','km Ziel','km','Zweck','Besondere Reise','Name','Notiz'],S.trips.map(t=>[fdate(t.date),t.from,t.to,t.kmStart,t.kmEnd,tripKm(t),t.purpose,t.special?'ja':'nein',t.name,t.note]));
+  sec('KM-STÄNDE',['Datum','km','Notiz'],S.odo.map(o=>[fdate(o.date),o.km,o.note]));
+  sec('MARKTWERTE',['Datum','Wert €','km','Quelle'],S.values.map(v=>[fdate(v.date),n(v.value),v.km,v.note]));
+  return '﻿'+lines.join('\r\n');
+}
+function report(){
+  const c=S.car,cs=costStats(),fs=fuelStats(),vn=valueNow();
+  const byCat=CATS.map(k=>[k,sum(cs.all.filter(x=>x.cat===k).map(x=>x.amount))]).filter(x=>x[1]>0);
+  $('#print').innerHTML=`<h1>${esc(c.make)} ${esc(c.model)}</h1><div>${esc(c.year)} · ${esc(c.engine)} · ${esc(c.ps)} PS · ${esc(c.color)} · Bericht vom ${fdate(today())}</div>
+  <h2>Überblick</h2><table><tr><td>Kilometerstand</td><td>${km(currentKm())}</td><td>Kaufpreis</td><td>${eur(+c.price)}</td></tr><tr><td>Seit Kauf gefahren</td><td>${km(kmSincePurchase())}</td><td>Wert ${vn.estimated?'(Schätzung)':''}</td><td>${eur(vn.v)}</td></tr><tr><td>Gesamtkosten</td><td>${eur(cs.total)}</td><td>Kosten/km</td><td>${cs.perKm!=null?nf(cs.perKm,2)+' €':'–'}</td></tr><tr><td>Ø Verbrauch</td><td>${fs.l100?nf(fs.l100,1)+' l/100 km':'–'}</td><td>Ø Literpreis</td><td>${fs.ppl?nf(fs.ppl,3)+' €':'–'}</td></tr></table>
+  <h2>Kosten nach Kategorie</h2><table>${byCat.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${eur(v,2)}</td></tr>`).join('')||'<tr><td>–</td></tr>'}</table>
+  <h2>Service-Historie</h2><table><tr><th>Datum</th><th>Art</th><th>km</th><th>Kosten</th><th>Notiz</th></tr>${S.service.filter(s=>s.status==='erledigt').sort((a,b)=>ts(a.date)-ts(b.date)).map(s=>`<tr><td>${fdate(s.date)}</td><td>${esc(s.type)}</td><td>${s.km?km(s.km):''}</td><td>${s.cost?eur(+s.cost,2):''}</td><td>${esc(s.note||'')}</td></tr>`).join('')}</table>
+  <h2>Tankbuch</h2><table><tr><th>Datum</th><th>km</th><th>Liter</th><th>€/l</th><th>Gesamt</th><th>Tankstelle</th></tr>${[...S.fuel].sort((a,b)=>ts(a.date)-ts(b.date)).map(f=>`<tr><td>${fdate(f.date)}</td><td>${nf(f.km)}</td><td>${nf(f.liters,2)}</td><td>${nf(f.price,3)}</td><td>${eur(f.total,2)}</td><td>${esc(f.station||'')}</td></tr>`).join('')}</table>`;
+  try{window.print()}catch(e){toast('Drucken hier nicht möglich')}
+}
+
+/* ============ Aktionen ============ */
+const ACT={
+  go:d=>nav(d.v),
+  add:d=>F[d.t]&&F[d.t](),
+  addReminder:()=>F.service(null,'geplant'),
+  edit:d=>{const map={fuel:'fuel',cost:'costs',service:'service',trip:'trips',plan:'plans',odo:'odo',value:'values'};const it=(S[map[d.t]]||[]).find(x=>x.id===d.id);if(it)F[d.t](it)},
+  editCost:d=>ACT.edit({t:d.t==='cost'?'cost':d.t,id:d.id}),
+  markDone:d=>{const s=S.service.find(x=>x.id===d.id);if(!s)return;
+    openForm({title:'Als erledigt markieren',item:{date:today(),km:currentKm(),cost:''},fields:[{k:'date',label:'Erledigt am',type:'date',req:1},{k:'km',label:'Kilometerstand',type:'int',unit:'km'},{k:'cost',label:'Kosten',type:'dec',unit:'€'}],
+      hint:'Rechnung kannst du danach im Eintrag anhängen.',onSave:o=>{Object.assign(s,o,{status:'erledigt'})}})},
+  costMode:d=>{costMode=d.v;render()},
+  costFilter:d=>{costFilter=d.v;render()},
+  theme:d=>{S.settings.theme=d.v;applyTheme();persist();render()},
+  finishSetup:()=>{
+    const date=$('#s_date').value||today(),price=parseNum($('#s_price').value),kmp=parseInt2($('#s_kmp').value),kmn=parseInt2($('#s_kmn').value),war=$('#s_war').value,wk=parseInt2($('#s_wk').value);
+    if(!price||!kmp){toast('Bitte Kaufpreis und km beim Kauf angeben');return}
+    if(kmn&&kmn<kmp){toast('km heute ist kleiner als km beim Kauf');return}
+    Object.assign(S.car,{purchaseDate:date,price,kmPurchase:kmp,warrantyUntil:war});
+    if(wk)S.settings.weeklyKm=wk;
+    if(kmn&&kmn>kmp)S.odo.push({id:uid(),date:today(),km:kmn,note:'Einrichtung'});
+    S.setup=true;invalidate();persist();nav('cockpit');toast('Willkommen in deiner Garage');
+  },
+  exportJSON:()=>download(`garage-backup-${today()}.json`,new Blob([JSON.stringify(S)],{type:'application/json'})),
+  copyJSON:async()=>{try{await navigator.clipboard.writeText(JSON.stringify(S));toast('Backup in Zwischenablage kopiert')}catch(e){toast('Kopieren nicht möglich')}},
+  exportCSV:()=>download(`garage-export-${today()}.csv`,new Blob([csv()],{type:'text/csv;charset=utf-8'})),
+  printReport:()=>report(),
+  wipe:()=>askConfirm('Alle Daten unwiderruflich löschen? Mach vorher ein Backup.','Alles löschen',()=>{S=defaultState();invalidate();persist();applyTheme();nav('cockpit');toast('Alle Daten gelöscht')}),
+  quick:()=>{
+    const q=[['fuel','Tanken',I.fuel],['cost','Ausgabe',I.euro],['odo','km-Stand',I.odo],['trip','Fahrt',I.pin],['service','Service',I.wrench],['value','Marktwert',I.tag]];
+    const sh=openSheet(`<div class="sheet-h"><button class="l" data-x="c">Schließen</button><h2>Hinzufügen</h2><span class="r"></span></div><div class="qagrid">${q.map(([t,l,ic])=>`<button class="qa" data-q="${t}"><span class="ic">${ic}</span>${l}</button>`).join('')}</div><div class="qagrid" style="grid-template-columns:1fr 1fr"><button class="qa" data-q="reminder"><span class="ic">${I.flag}</span>Erinnerung</button><button class="qa" data-q="plan"><span class="ic">${I.road}</span>Sonderfahrt</button></div>`);
+    sh.querySelector('[data-x=c]').onclick=()=>closeSheet();
+    sh.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{const t=b.dataset.q;closeSheet(true);t==='reminder'?F.service(null,'geplant'):F[t]()});
+  }
+};
+document.addEventListener('click',e=>{
+  if(e.target.closest('.sheet [data-x],.sheet [data-q],.sheet #docs'))return;
+  const el=e.target.closest('[data-act]');if(!el)return;
+  if(el.closest('.overlay')&&!el.closest('.sheet'))return;
+  const fn=ACT[el.dataset.act];if(fn){e.preventDefault();e.stopPropagation();fn(el.dataset,el)}
+},true);
+document.addEventListener('input',e=>{
+  if(e.target.dataset.live==='sim'){simPrice=parseNum($('#simPrice').value)||0;simDate=$('#simDate').value||today();$('#simOut').innerHTML=simOut()}
+});
+document.addEventListener('change',async e=>{
+  if(e.target.dataset.carphoto){const f=e.target.files[0];if(f){S.car.photo=await compressImage(f,1400,.8);persist();render();toast('Foto gespeichert')}return}
+  if(!e.target.dataset.import)return;
+  const f=e.target.files[0];if(!f)return;
+  try{const o=JSON.parse(await f.text());if(!o||!o.car)throw 0;
+    askConfirm('Backup wiederherstellen? Die aktuellen Daten werden ersetzt.','Wiederherstellen',()=>{S=merge(defaultState(),o);S.setup=true;invalidate();persist();applyTheme();nav('cockpit');toast('Backup wiederhergestellt')});
+  }catch(err){toast('Datei ist kein gültiges Backup')}
+  e.target.value='';
+});
+
+/* ============ Navigation ============ */
+const TAB_OF={cockpit:'cockpit',tanken:'tanken',service:'service',mehr:'mehr',kosten:'mehr',kilometer:'mehr',wert:'mehr',finanzierung:'mehr',daten:'mehr',fahrzeug:'cockpit'};
+let current='cockpit';
+function nav(v){if(!V[v])v='cockpit';if(location.hash.slice(1)!==v){try{location.hash=v}catch(e){}}current=v;render();window.scrollTo({top:0,behavior:'instant'})}
+window.addEventListener('hashchange',()=>{const v=location.hash.slice(1);if(V[v]&&v!==current){current=v;render();window.scrollTo(0,0)}});
+function renderTabs(){
+  const tabs=[['cockpit','Cockpit',I.gauge],['tanken','Tanken',I.fuel],['plus','',I.plus],['service','Service',I.wrench],['mehr','Mehr',I.more]];
+  const on=TAB_OF[current]||'cockpit';
+  $('#tabs').innerHTML=tabs.map(([k,l,ic])=>k==='plus'?`<button class="tab plus" data-act="quick" aria-label="Hinzufügen"><span>${ic}</span></button>`:`<button class="tab ${on===k?'on':''}" data-act="go" data-v="${k}">${ic}<span>${l}</span></button>`).join('');
+}
+function render(){
+  const view=$('#view');
+  if(!S.setup){view.innerHTML=V.setup();$('#tabbar').hidden=true;return}
+  $('#tabbar').hidden=false;
+  view.innerHTML=V[current]();
+  renderTabs();
+  requestAnimationFrame(()=>view.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+'%'));
+  const kmEl=view.querySelector('[data-count]');if(kmEl&&!render.counted){render.counted=true;countUp(kmEl)}
+}
+function countUp(el){const to=+el.dataset.count,small=el.querySelector('small').outerHTML,t0=performance.now(),from=Math.max(0,to-1500),dur=900;
+  const step=t=>{const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);el.innerHTML=nf(from+(to-from)*e)+small;if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+function applyTheme(){
+  document.documentElement.dataset.theme=S.settings.theme||'auto';
+  const dark=S.settings.theme==='dark'||(S.settings.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name=theme-color]').content=dark?'#000000':'#f2f2f4';
+}
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',applyTheme);
+function makeIcon(){
+  try{const c=document.createElement('canvas');c.width=c.height=180;const x=c.getContext('2d');const g=x.createLinearGradient(0,0,0,180);g.addColorStop(0,'#3a3b3f');g.addColorStop(1,'#0e0e10');x.fillStyle=g;x.fillRect(0,0,180,180);
+    x.fillStyle='#f5f5f7';x.font='700 54px -apple-system,Helvetica,Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('GTS',90,84);x.fillStyle='#8a8d91';x.font='600 17px -apple-system,Helvetica,Arial';x.fillText('GARAGE',90,124);
+    $('#touchIcon').href=c.toDataURL('image/png')}catch(e){}
+}
+
+/* ============ Start ============ */
+(async function(){
+  makeIcon();
+  await Store.init();
+  const saved=await Store.load();
+  if(saved&&saved.car)S=merge(defaultState(),saved);
+  applyTheme();
+  const h=location.hash.slice(1);current=V[h]&&h!=='setup'?h:'cockpit';
+  render();
+})();
+</script>
+</body>
+</html>
